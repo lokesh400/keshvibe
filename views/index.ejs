@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern E-commerce Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet" />
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
+    <script
+        src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1">
+        </script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
+        data-border-radius="medium">
+        </script>
+    <style>
+        /* Hide scrollbar but allow scrolling */
+        .px-4.overflow-x-auto {
+            -ms-overflow-style: none;
+            /* IE & Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            overflow-x: auto;
+        }
+
+        .px-4.overflow-x-auto::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari */
+        }
+
+        /* Category Button Styles */
+        .category-btn {
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .category-btn.active {
+            background: black !important;
+            color: white !important;
+        }
+
+        .toast {
+            background-color: #323232;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.hide {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        /* Loader Animation */
+        .loader {
+            width: 30px;
+            height: 4px;
+            background: white;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #4CAF50;
+            animation: loading 3s linear forwards;
+        }
+
+        @keyframes loading {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-[Inter] bg-gray-50">
+
+    <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col space-y-2"></div>
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md border-b border-gray-200">
+        <%- include('components/navbar.ejs') %>
+    </header>
+
+
+    <main>
+        <div class="glide relative overflow-hidden">
+            <div class="glide__track" data-glide-el="track">
+                <ul class="glide__slides">
+                    <li class="glide__slide relative">
+                        <img src="/images/banner-1.jpg" alt="Summer Collection" />
+                        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <h2 class="text-4xl font-bold mb-4">Summer Collection 2024</h2>
+                                <p class="text-xl mb-8">Up to 50% off on selected items</p>
+                                <button
+                                    class="!rounded-button bg-custom hover:bg-custom/90 text-white px-8 py-3 text-lg font-medium">Shop
+                                    Now</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="absolute bottom-4 left-0 right-0" data-glide-el="controls[nav]">
+                <div class="flex justify-center space-x-2">
+                    <button class="w-2 h-2 rounded-full bg-white/50" data-glide-dir="=0"></button>
+                    <button class="w-2 h-2 rounded-full bg-white" data-glide-dir="=1"></button>
+                    <button class="w-2 h-2 rounded-full bg-white/50" data-glide-dir="=2"></button>
+                </div>
+            </div>
+        </div>
+
+        <section class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h2 class="text-2xl font-bold mb-8">Shop by Category</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/madefor/category/products/catrgory/:women" class="group">
+                    <div
+                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <img src="/images/wc.jpg" class="w-full h-48 object-cover" alt="Women" />
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Women</h3>
+                            <p class="text-sm text-gray-500">1,234 items</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/madefor/category/products/category/:men" class="group">
+                    <div
+                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <img src="/images/mc.jpg" class="w-full h-48 object-cover" alt="Men" />
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Men</h3>
+                            <p class="text-sm text-gray-500">987 items</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/madefor/category/products/category/this/:kids" class="group">
+                    <div
+                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <img src="/images/kc.jpg" class="w-full h-48 object-cover" alt="Kids" />
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Kids</h3>
+                            <p class="text-sm text-gray-500">567 items</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold">Featured Products</h2>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <select
+                            class="appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-custom">
+                            <option>Sort by: Featured</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Customer Rating</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="p-2 text-gray-400 hover:text-custom">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="p-2 text-gray-400 hover:text-custom">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4 overflow-x-auto whitespace-nowrap pb-3">
+                <div class="inline-flex gap-2">
+                    <button class="category-btn px-4 py-1.5 bg-gray-100 text-gray-600 text-sm !rounded-button"
+                        onclick="filterCategory('')">
+                        All
+                    </button>
+                    <% let categories=[...new Set(products.map(p=> p.category))]; %>
+                        <% categories.forEach(category=> { %>
+                            <button class="category-btn px-4 py-1.5 bg-gray-100 text-gray-600 text-sm !rounded-button"
+                                onclick="filterCategory('<%= category %>')">
+                                <%= category %>
+                            </button>
+                            <% }); %>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="product-list">
+                <% products.forEach(product=> { %>
+                    <div class="group product-card">
+                        <div
+                            class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                            <div class="relative">
+                                <a href="/this/project/<%= product._id %>">
+                                    <img src="<%= product.coverPhoto %>" class="w-full h-80 object-cover"
+                                        alt="<%= product.name %>" />
+                                </a>
+                                <button class="absolute top-4 right-4 text-gray-400 hover:text-custom">
+                                    <i class="far fa-heart text-xl"></i>
+                                </button>
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-custom text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-medium text-gray-900">
+                                    <%= product.name %>
+                                </h3>
+                                <div class="mt-2 flex items-center">
+                                    <span class="text-custom font-medium">Rs <%= product.price %> /-</span>
+                                    <span class="ml-2 text-sm text-gray-500 line-through">$79.99</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <!-- Show More Button -->
+            <a href="/all/products">
+                <div class="text-center mt-6">
+                    <button id="show-more-btn"
+                        class="px-6 py-2 bg-custom text-white text-sm rounded-lg hover:bg-custom/90">
+                        Show More
+                    </button>
+                </div>
+            </a>
+
+        </section>
+
+        <section class="bg-white">
+            <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
+                        <p class="text-gray-600 mb-6">Get the latest updates about new products and upcoming sales.</p>
+                        <form class="space-y-4">
+                            <div class="relative">
+                                <input type="email"
+                                    class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-custom focus:border-custom"
+                                    placeholder="Enter your email" />
+                                <button type="submit"
+                                    class="!rounded-button absolute right-2 top-1/2 transform -translate-y-1/2 bg-custom hover:bg-custom/90 text-white px-4 py-2">Subscribe</button>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox"
+                                    class="mt-1 h-4 w-4 rounded border-gray-300 text-custom focus:ring-custom" />
+                                <label class="ml-2 text-sm text-gray-600">I agree to receive promotional emails and
+                                    accept the <a href="#" class="text-custom hover:underline">Privacy
+                                        Policy</a></label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <i class="fas fa-truck text-3xl text-custom mb-4"></i>
+                            <h3 class="font-medium mb-2">Free Shipping</h3>
+                            <p class="text-sm text-gray-600">On orders over $50</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <i class="fas fa-undo text-3xl text-custom mb-4"></i>
+                            <h3 class="font-medium mb-2">Easy Returns</h3>
+                            <p class="text-sm text-gray-600">30-day return policy</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <i class="fas fa-lock text-3xl text-custom mb-4"></i>
+                            <h3 class="font-medium mb-2">Secure Payment</h3>
+                            <p class="text-sm text-gray-600">100% secure checkout</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <i class="fas fa-headset text-3xl text-custom mb-4"></i>
+                            <h3 class="font-medium mb-2">24/7 Support</h3>
+                            <p class="text-sm text-gray-600">Here to help you</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">About Us</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Our Story</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Returns &amp; Exchanges</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-pinterest text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Download Our App</h3>
+                    <div class="space-y-4">
+                        <a href="#" class="block">
+                            <img src="https://ai-public.creatie.ai/gen_page/app-store-badge.png"
+                                alt="Download on the App Store" class="h-10" />
+                        </a>
+                        <a href="#" class="block">
+                            <img src="https://ai-public.creatie.ai/gen_page/google-play-badge.png"
+                                alt="Get it on Google Play" class="h-10" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">© 2024 Your Store. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-4 md:mt-0">
+                        <img src="https://ai-public.creatie.ai/gen_page/payment-visa.png" alt="Visa" class="h-8" />
+                        <img src="https://ai-public.creatie.ai/gen_page/payment-mastercard.png" alt="Mastercard"
+                            class="h-8" />
+                        <img src="https://ai-public.creatie.ai/gen_page/payment-amex.png" alt="American Express"
+                            class="h-8" />
+                        <img src="https://ai-public.creatie.ai/gen_page/payment-paypal.png" alt="PayPal" class="h-8" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+
+        let page = 2; // Start loading from page 2 since page 1 is already loaded
+        function filterCategory(category) {
+            document.querySelectorAll(".product-card").forEach(card => {
+                card.style.display = card.getAttribute("data-category") === category || category === "" ? "block" : "none";
+            });
+            document.querySelectorAll(".category-btn").forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+        }
+
+        function toggleWishlist(icon) {
+            icon.classList.toggle("active");
+        }
+
+        document.getElementById("search").addEventListener("input", function () {
+            let query = this.value.toLowerCase();
+            document.querySelectorAll(".product-card").forEach(card => {
+                let name = card.querySelector("h4").innerText.toLowerCase() || card.querySelector("h3").innerText.toLowerCase();
+                card.style.display = name.includes(query) ? "block" : "none";
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchForm = document.querySelector("form[action='/search/products']");
+            searchForm.addEventListener("submit", function (event) {
+                const query = searchForm.querySelector("input[name='query']").value.trim();
+                if (query === "") {
+                    event.preventDefault(); // Stop form submission
+                    window.location.href = "/search-error"; // Redirect to error page
+                }
+            });
+        });
+
+
+
+        new Glide('.glide', {
+            type: 'carousel',
+            startAt: 0,
+            perView: 1,
+            autoplay: 5000,
+            hoverpause: true,
+            animationDuration: 800,
+            animationTimingFunc: 'ease-in-out',
+            gap: 0
+        }).mount();
+    </script>
+</body>
+
+</html>

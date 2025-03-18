@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        /* General Styling */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+        h1 { text-align: center; color: #333; }
+        
+        /* Container */
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); }
+
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background-color: #007bff; color: white; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+
+        /* Filters */
+        .filters { display: flex; gap: 10px; margin-bottom: 15px; }
+        .filters input, .filters select { flex: 1; }
+
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #007bff; color: white; cursor: pointer; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        /* Edit Form */
+        #edit-form-container { display: none; background: #fff; padding: 15px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0,0,0,0.2); margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel - Manage Products</h1>
+
+        <a href="/add/new/product">
+            <button type="submit">Add Product</button>
+        </a>
+
+        <!-- Search, Sort, and Filter Controls -->
+        <div class="filters">
+            <input type="text" id="search" placeholder="Search products...">
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <% products.forEach(product => { %>
+                    <option value="<%= product.category %>"><%= product.category %></option>
+                <% }); %>
+            </select>
+            <select id="stockFilter">
+                <option value="">All Stock</option>
+                <option value="inStock">In Stock</option>
+                <option value="outStock">Out of Stock</option>
+            </select>
+            <select id="sort">
+                <option value="name">Sort by Name</option>
+                <option value="price">Sort by Price</option>
+            </select>
+        </div>
+
+        <!-- Product Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Name</th>
+                    <th onclick="sortTable(1)">Price</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <% products.forEach(product => { %>
+                    <tr>
+                        <td><%= product.name %></td>
+                        <td>$<%= product.price %></td>
+                        <td><%= product.category %></td>
+                        <td><%= product.stock ? "In Stock" : "Out of Stock" %></td>
+                        <td>
+                            <button onclick="editProduct('<%= product._id %>', '<%= product.name %>', <%= product.price %>, '<%= product.category %>', '<%= product.stock %>')">Edit</button>
+                            <form method="POST" action="/admin/delete/<%= product._id %>" style="display:inline;">
+                                <button type="submit" style="background:red;">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <!-- Edit Product Form -->
+        <div id="edit-form-container">
+            <h2>Edit Product</h2>
+            <form id="edit-form" method="POST">
+                <input type="hidden" id="edit-id" name="id">
+                <input type="text" id="edit-name" name="name" required>
+                <input type="number" id="edit-price" name="price" required>
+                <input type="text" id="edit-category" name="category" required>
+                <select id="edit-stock" name="stock">
+                    <option value="true">In Stock</option>
+                    <option value="false">Out of Stock</option>
+                </select>
+                <button type="submit">Update</button>
+                <button type="button" onclick="hideEditForm()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Store original product list
+        let products = Array.from(document.querySelectorAll("#product-list tr")).map(row => ({
+            element: row,
+            name: row.children[0].textContent.toLowerCase(),
+            price: parseFloat(row.children[1].textContent.replace("$", "")),
+            category: row.children[2].textContent.toLowerCase(),
+            stock: row.children[3].textContent.toLowerCase()
+        }));
+
+        function filterAndSortProducts() {
+            const searchQuery = document.getElementById("search").value.toLowerCase();
+            const category = document.getElementById("categoryFilter").value.toLowerCase();
+            const stock = document.getElementById("stockFilter").value.toLowerCase();
+            const sortOption = document.getElementById("sort").value;
+
+            let filteredProducts = products.filter(p => 
+                p.name.includes(searchQuery) &&
+                (category === "" || p.category === category) &&
+                (stock === "" || p.stock.includes(stock))
+            );
+
+            filteredProducts.sort((a, b) => {
+                if (sortOption === "price") return a.price - b.price;
+                return a.name.localeCompare(b.name);
+            });
+
+            products.forEach(p => p.element.style.display = "none");
+            filteredProducts.forEach(p => p.element.style.display = "table-row");
+        }
+
+        document.getElementById("search").addEventListener("input", filterAndSortProducts);
+        document.getElementById("categoryFilter").addEventListener("change", filterAndSortProducts);
+        document.getElementById("stockFilter").addEventListener("change", filterAndSortProducts);
+        document.getElementById("sort").addEventListener("change", filterAndSortProducts);
+
+        function editProduct(id, name, price, category, stock) {
+            document.getElementById("edit-id").value = id;
+            document.getElementById("edit-name").value = name;
+            document.getElementById("edit-price").value = price;
+            document.getElementById("edit-category").value = category;
+            document.getElementById("edit-stock").value = stock;
+            document.getElementById("edit-form").action = "/admin/edit/" + id;
+            document.getElementById("edit-form-container").style.display = "block";
+        }
+
+        function hideEditForm() {
+            document.getElementById("edit-form-container").style.display = "none";
+        }
+    </script>
+</body>
+</html>

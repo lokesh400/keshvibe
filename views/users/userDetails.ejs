@@ -1,0 +1,234 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Document
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+            padding-top: 140px;
+        }
+        .container {
+            width: 375px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #2c2c54;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            color: white;
+        }
+        .header .icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header .icons i {
+            color: white;
+            font-size: 20px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .profile img {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .profile-info p {
+            margin: 0;
+        }
+        .user-info {
+            background-color: #3b3b98;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 20px;
+        }
+        .user-info p {
+            margin: 10px 0;
+        }
+        .user-info a {
+            text-decoration: none;
+            padding: 8px;
+            color: white;
+            background-color: #b4bbe5;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .support {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px;
+        }
+        .contact {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #3b3b98;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+        .footer {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .social-media {
+            background-color: #3b3b98;
+            width: 100%;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        .social-media h6 {
+            margin: 0 0 10px 0;
+        }
+        .social-media a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.7em;
+        }
+        .sign-out {
+            background-color: #b4bbe5;
+            text-align: center;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .sign-out a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        @media (max-width:740px){
+            .container {
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        }
+  </style>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <div class="profile">
+     <img alt="User profile picture" height="80" src="https://storage.googleapis.com/a1aa/image/CZkglYbhD1r2HNwNe3SeuIak6sRda6mKgssVC5GkKQJ9rP0TA.jpg" width="80"/>
+     <div class="profile-info">
+      <h4>
+       <b>
+        <%= currUser.name %>
+       </h4>
+      </p>
+     </div>
+    </div>
+   </div>
+   <div class="user-info">
+    <p>
+     <b>
+      Name:
+     </b>
+     <%= currUser.name %>
+    </p>
+    <p>
+     <b>
+      Email:
+     </b>
+     <%= currUser.email %>
+    </p>
+    <p>
+     <b>
+      Ph.No:
+     </b>
+     <%= currUser.contactNubmer %>
+    </p>
+    <p>
+     <a href="/user/forget-password">
+      Reset Password
+     </a>
+    </p>
+   </div>
+   <div class="support">
+    <div class="contact">
+     <i class="fas fa-comments" style="color: blue;">
+     </i>
+     <a href="#">
+      Live Support
+     </a>
+    </div>
+    <div class="contact">
+     <i class="fas fa-address-book" style="color: blue;">
+     </i>
+     <a href="/user/support">
+      Contact Us
+     </a>
+    </div>
+   </div>
+   <div class="footer">
+    <div class="social-media">
+     <h6>
+      Join Our Community
+     </h6>
+     <div style="display: flex; justify-content: center;">
+      <a href="">
+       <i class="fab fa-facebook-f">
+       </i>
+      </a>
+      <a href="">
+       <i class="fab fa-twitter">
+       </i>
+      </a>
+      <a href="">
+       <i class="fab fa-instagram">
+       </i>
+      </a>
+      <a href="">
+       <i class="fab fa-linkedin-in">
+       </i>
+      </a>
+     </div>
+     <div class="sign-out">
+      <i class="fas fa-sign-out-alt">
+      </i>
+      <a href="/user/logout">
+       Log Out
+      </a>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
