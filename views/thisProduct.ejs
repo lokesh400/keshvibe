@@ -339,7 +339,8 @@
             const userId = "<%= currUser._id %>"; // Replace with actual user 
             const size =  document.getElementById("selectedSizeInput").value;
             try {
-                const response = await fetch("/add-to-cart", {
+                if(size){
+                    const response = await fetch("/add-to-cart", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -351,15 +352,17 @@
                         size,
                     })
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     showToast("Item added to cart ✅");
                 } else {
                     showToast("Failed to add to cart ❌");
                     console.error(data.message);
                 }
+                } else {
+                    showToast("Please select a valid size ❌");
+                }
+                
             } catch (error) {
                 console.error("Error adding to cart:", error);
                 showToast("Something went wrong ❌");

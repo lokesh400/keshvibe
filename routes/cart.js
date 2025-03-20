@@ -128,16 +128,17 @@ router.post("/update-quantity", async (req, res) => {
 });
 
 // 🗑 Remove item from cart
-router.post("/remove-from-cart", async (req, res) => {
-    const { productId, userId } = req.body;
+router.delete("/delete/this/product", async (req, res) => {
+    const userId = req.user;
     try {
         const cart = await Cart.findOne({ user: userId });
         if (!cart) return res.status(404).json({ message: "Cart not found" });
-        cart.items = cart.items.filter(item => item.product.toString() !== productId);
+        cart.items = cart.items.filter(item => item.product.toString() !== req.body.id);
         await cart.save();
         res.json({ message: "Item removed from cart" });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
+        console.log(error)
     }
 });
 
