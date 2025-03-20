@@ -4,27 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet" />
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
+    <script
+        src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1">
+        </script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
+        data-border-radius="medium">
+        </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
-<body class="bg-gray-50 font-sans">
+<body>
     <!-- Navbar -->
-    <nav class="bg-white border-b border-gray-200 shadow-sm">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <h1 class="text-lg font-semibold text-gray-900">Admin Panel</h1>
-                <a href="/" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-                    <i class="fas fa-home mr-2"></i> Dashboard
-                </a>
-            </div>
-        </div>
-    </nav>
+    <%- include('../components/sidebar.ejs') %>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style=" margin-left: 254px; width: calc(100% - 254px);">
         <h1 class="text-2xl font-semibold text-gray-900 mb-6">All Orders</h1>
 
         <!-- Filters & Print Button -->
@@ -89,7 +89,7 @@
                 const qrDiv = document.getElementById(`qr-${order._id}`);
                 if (qrDiv) {
                     new QRCode(qrDiv, {
-                        text: `http://192.168.110.198:666/order-details/${order._id}`,
+                        text: `http://192.168.21.198:666/order-details/${order._id}`,
                         width: 80,
                         height: 80
                     });

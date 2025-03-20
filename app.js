@@ -128,15 +128,15 @@ app.get("/", async (req,res)=>{
     res.render("index.ejs", { products });
 })
 
-app.get("/load-more-products", async (req, res) => {
-  let page = parseInt(req.query.page) || 1; // Get the page number from the request
-  let limit = 10; // Load 10 products per request
-  let skip = (page - 1) * limit;
+// app.get("/load-more-products", async (req, res) => {
+//   let page = parseInt(req.query.page) || 1; // Get the page number from the request
+//   let limit = 10; // Load 10 products per request
+//   let skip = (page - 1) * limit;
 
-  const products = await Product.find().skip(skip).limit(limit);
+//   const products = await Product.find().skip(skip).limit(limit);
   
-  res.json(products);
-});
+//   res.json(products);
+// });
 
 app.get("/admin", async (req,res)=>{
   res.render('admin/adminIndex.ejs');
@@ -149,6 +149,59 @@ app.get("/aboutus", (req,res)=>{
 app.get("/services", (req,res)=>{
   res.render('services.ejs');
 })
+
+
+
+// Route to render the Add Address Page
+app.get("/add-address", (req, res) => {
+  res.render("add-address", { 
+      currUser: req.user,  // Pass the logged-in user
+      isEdit: false  // Explicitly set isEdit to false
+  });
+});
+
+// Handle Address Submission
+app.post('/add-address', async (req, res) => {
+  const { street, city, state, pincode, mobile } = req.body;
+  console.log(req.body);
+  try {
+      await User.findByIdAndUpdate(req.user._id, {
+          address: { street, city, state, pincode },
+          mobile
+      });
+      res.redirect(`/cart/${req.user._id}`);
+  } catch (err) {
+      console.error(err);
+      res.redirect('/add-address');
+  }
+});
+
+// Route to render the Edit Address Page
+app.get("/edit-address", (req, res) => {
+  if (!req.user.address) {
+      return res.redirect("/add-address");
+  }
+  res.render("add-address", { 
+      currUser: req.user, 
+      isEdit: true  // Set isEdit to true for edit mode
+  });
+});
+
+// Handle Address Update
+app.post('/edit-address', async (req, res) => {
+  const { street, city, state, pincode, mobile } = req.body;
+  try {
+      await User.findByIdAndUpdate(req.user._id, {
+          address: { street, city, state, pincode },
+          mobile
+      });
+      res.redirect(`/cart/${req.user._id}`);
+  } catch (err) {
+      console.error(err);
+      res.redirect('/edit-address');
+  }
+});
+
 
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

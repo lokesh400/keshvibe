@@ -42,8 +42,10 @@
             <% products.forEach(product=> { %>
                 <div class="product bg-white p-4 rounded-lg shadow-md transform transition hover:-translate-y-2"
                     data-price="<%= product.price %>" data-madefor="<%= product.madeFor.toLowerCase() %>">
-                    <img src="<%= product.coverPhoto %>" alt="<%= product.name %>"
+                    <a href="/this/product/<%= product._id %>">
+                        <img src="<%= product.coverPhoto %>" alt="<%= product.name %>"
                         class="w-full h-48 object-cover rounded-lg">
+                    </a>
                     <h3 class="mt-3 font-semibold text-gray-800">
                         <%= product.name %>
                     </h3>

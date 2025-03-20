@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
+const User = require('../models/User')
 const router = express.Router();
 
 // ✅ Render Admin Orders Page
@@ -93,6 +94,17 @@ router.post("/order-details/:orderId", async (req, res) => {
       res.json({ success: false, message: "Error updating order status." });
     }
   });
+
+  //admin to show all costumers
+  router.get("/admin/all/costumers", async (req, res) => {
+    try {
+       const costumers = await User.find({role:"costumer"})
+       res.render('admin/allCostumers.ejs',{customers:costumers})
+    } catch (error) {
+        console.error("Error fetching order counts:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 
 module.exports = router;

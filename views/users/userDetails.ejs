@@ -1,234 +1,150 @@
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Document
-  </title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <style>
-   body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f0f0f0;
-            padding-top: 140px;
-        }
-        .container {
-            width: 375px;
-            margin: 0 auto;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-        }
-        .header {
-            background-color: #2c2c54;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px;
-            color: white;
-        }
-        .header .icons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header .icons i {
-            color: white;
-            font-size: 20px;
-        }
-        .profile {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .profile img {
-            height: 80px;
-            width: 80px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-        .profile-info p {
-            margin: 0;
-        }
-        .user-info {
-            background-color: #3b3b98;
-            color: white;
-            padding: 20px;
-            border-radius: 20px;
-            margin: 20px;
-        }
-        .user-info p {
-            margin: 10px 0;
-        }
-        .user-info a {
-            text-decoration: none;
-            padding: 8px;
-            color: white;
-            background-color: #b4bbe5;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .support {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px;
-        }
-        .contact {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px solid #3b3b98;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .contact a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-        .footer {
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .social-media {
-            background-color: #3b3b98;
-            width: 100%;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            color: white;
-        }
-        .social-media h6 {
-            margin: 0 0 10px 0;
-        }
-        .social-media a {
-            color: white;
-            margin: 0 10px;
-            text-decoration: none;
-            font-size: 1.7em;
-        }
-        .sign-out {
-            background-color: #b4bbe5;
-            text-align: center;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .sign-out a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        @media (max-width:740px){
-            .container {
-            width: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-        }
-        }
-  </style>
- </head>
- <body>
-  <div class="container">
-   <div class="header">
-    <div class="profile">
-     <img alt="User profile picture" height="80" src="https://storage.googleapis.com/a1aa/image/CZkglYbhD1r2HNwNe3SeuIak6sRda6mKgssVC5GkKQJ9rP0TA.jpg" width="80"/>
-     <div class="profile-info">
-      <h4>
-       <b>
-        <%= currUser.name %>
-       </h4>
-      </p>
-     </div>
-    </div>
-   </div>
-   <div class="user-info">
-    <p>
-     <b>
-      Name:
-     </b>
-     <%= currUser.name %>
-    </p>
-    <p>
-     <b>
-      Email:
-     </b>
-     <%= currUser.email %>
-    </p>
-    <p>
-     <b>
-      Ph.No:
-     </b>
-     <%= currUser.contactNubmer %>
-    </p>
-    <p>
-     <a href="/user/forget-password">
-      Reset Password
-     </a>
-    </p>
-   </div>
-   <div class="support">
-    <div class="contact">
-     <i class="fas fa-comments" style="color: blue;">
-     </i>
-     <a href="#">
-      Live Support
-     </a>
-    </div>
-    <div class="contact">
-     <i class="fas fa-address-book" style="color: blue;">
-     </i>
-     <a href="/user/support">
-      Contact Us
-     </a>
-    </div>
-   </div>
-   <div class="footer">
-    <div class="social-media">
-     <h6>
-      Join Our Community
-     </h6>
-     <div style="display: flex; justify-content: center;">
-      <a href="">
-       <i class="fab fa-facebook-f">
-       </i>
-      </a>
-      <a href="">
-       <i class="fab fa-twitter">
-       </i>
-      </a>
-      <a href="">
-       <i class="fab fa-instagram">
-       </i>
-      </a>
-      <a href="">
-       <i class="fab fa-linkedin-in">
-       </i>
-      </a>
-     </div>
-     <div class="sign-out">
-      <i class="fas fa-sign-out-alt">
-      </i>
-      <a href="/user/logout">
-       Log Out
-      </a>
-     </div>
-    </div>
-   </div>
-  </div>
- </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+    <script
+        src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
+        data-border-radius='medium'></script>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-white shadow">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center"> <img class="h-8 w-auto"
+                            src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png" alt="Logo">
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button
+                        class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium">Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-8xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-6 py-8 border-b border-gray-200">
+                <div class="flex items-center"> <img class="h-20 w-20 rounded-full object-cover"
+                        src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a young business professional with a warm smile, wearing business attire, against a neutral background. The lighting is soft and flattering, creating a welcoming and approachable appearance&width=200&height=200&orientation=squarish&flag=83407cc5-f2bf-4a4e-9b2f-1cbbeca6344b"
+                        alt="Profile">
+                    <div class="ml-6">
+                        <h1 class="text-2xl font-semibold text-gray-900">Welcome back, <%= user.name %></h1>
+                        <p class="mt-1 text-sm text-gray-500">Last login: Today at 10:30 AM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-6">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Personal Information</h2>
+                                <button
+                                    class="!rounded-button text-custom border border-custom px-4 py-2 text-sm font-medium">
+                                    <i class="fas fa-edit mr-2"></i>Edit
+                                </button>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.name %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.email %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                    <p class="mt-1 text-sm text-gray-900">+91 <%= user.mobile %></p>
+                                </div>
+                                <!-- <div>
+                                    <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                                    <p class="mt-1 text-sm text-gray-900">January 15, 1990</p>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-medium text-gray-900">Address Information</h2>
+                                <a href="/edit-address">
+                                    <button
+                                    class="!rounded-button text-custom border border-custom px-4 py-2 text-sm font-medium">
+                                    <i class="fas fa-edit mr-2"></i>Edit Address
+                                </button>
+                                </a>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Street Address</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.address.street %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">City</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.address.city %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">State</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.address.state %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Postal Code</label>
+                                    <p class="mt-1 text-sm text-gray-900"><%= user.address.pincode %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Country</label>
+                                    <p class="mt-1 text-sm text-gray-900">India</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-gray-50 p-6 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium text-gray-900">Recent Orders</h2>
+                        <a href="/my/orders">
+                            <button class="!rounded-button bg-custom text-white px-6 py-2 text-sm font-medium">
+                                <i class="fas fa-shopping-bag mr-2"></i>View All Orders
+                            </button>
+                        </a>
+                    </div>
+                    <div class="bg-white rounded-lg shadow">
+                        <div class="p-4 border-b">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Order #12345</p>
+                                    <p class="text-sm text-gray-500">Placed on March 15, 2024</p>
+                                </div>
+                                <span
+                                    class="px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-full">Delivered</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white mt-12">
+        <div class="max-w-8xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
 </html>

@@ -22,468 +22,101 @@
         <%- include('../components/sidebar.ejs') %>
     </section>
 
-    <div class="min-h-screen flex"
-        style="--tw-custom: #4169E1; --tw-custom-dark: #27408B; --tw-custom-light: #B0E0E6; margin-left: 254px; width: calc(100% - 254px);">
-        <div class="flex-1">
-            <header class="bg-white shadow">
-                <div class="flex items-center justify-between px-6 py-4">
-                    <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
-                    <div class="flex items-center space-x-4">
-                        <button class="p-2 text-gray-500 hover:text-gray-600">
-                            <i class="fas fa-bell"></i>
-                        </button>
-                        <div class="relative">
-                            <button class="flex items-center space-x-3">
-                                <img src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a business person with a friendly smile, wearing a suit against a neutral background&width=40&height=40&orientation=squarish&flag=b48765b9-a627-49e8-90f5-f939a227295f&flag=817ccb66-3631-463e-8782-f3e5f1db7ebe"
-                                    class="w-10 h-10 rounded-full object-cover" />
-                                <span class="text-gray-700">John Smith</span>
-                                <i class="fas fa-chevron-down text-gray-500"></i>
-                            </button>
+    <main style="margin-left: 254px; width: calc(100% - 254px);" >
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                    <button class="text-custom hover:text-custom-dark">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
+                            <i class="fas fa-heart text-custom"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-900">Liked Design System</p>
+                            <p class="text-xs text-gray-500">2 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
+                            <i class="fas fa-comment text-custom"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-900">Commented on UI Kit</p>
+                            <p class="text-xs text-gray-500">1 hour ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
+                            <i class="fas fa-share text-custom"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-900">Shared New Project</p>
+                            <p class="text-xs text-gray-500">3 hours ago</p>
                         </div>
                     </div>
                 </div>
-            </header>
-            <main class="p-6">
-                <div class="grid grid-cols-4 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-[#4169E1] bg-opacity-10">
-                                <i class="fas fa-dollar-sign text-[#4169E1]"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-500">Total Sales</h3>
-                                <p class="text-2xl font-semibold text-gray-900">$24,780</p>
-                                <p class="text-sm text-green-600">+12.5% from last month</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-[#4169E1] bg-opacity-10">
-                                <i class="fas fa-shopping-bag text-[#4169E1]"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-500">New Orders</h3>
-                                <p class="text-2xl font-semibold text-gray-900">156</p>
-                                <p class="text-sm text-green-600">+8.2% from last month</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-[#4169E1] bg-opacity-10">
-                                <i class="fas fa-box text-[#4169E1]"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-500">Low Stock Items</h3>
-                                <p class="text-2xl font-semibold text-gray-900">23</p>
-                                <p class="text-sm text-red-600">5 items need restock</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-[#4169E1] bg-opacity-10">
-                                <i class="fas fa-users text-[#4169E1]"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-500">Customer Growth</h3>
-                                <p class="text-2xl font-semibold text-gray-900">+892</p>
-                                <p class="text-sm text-green-600">+18.3% from last month</p>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Current Plan</h3>
+                    <span class="bg-custom text-white px-3 py-1 !rounded-button text-sm">Premium</span>
                 </div>
-                <div class="grid grid-cols-3 gap-6 mb-6">
-                    <div class="col-span-2 bg-white p-6 rounded-lg shadow">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Sales Overview</h2>
-                        <div id="salesChart" style="height: 300px;"></div>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-custom"></i>
+                        <p class="text-sm text-gray-600">Unlimited Projects</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Top Products</h2>
-                        <div id="productsChart" style="height: 300px;"></div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-custom"></i>
+                        <p class="text-sm text-gray-600">Advanced Analytics</p>
                     </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-check-circle text-custom"></i>
+                        <p class="text-sm text-gray-600">Priority Support</p>
+                    </div>
+                    <button
+                        class="w-full bg-custom text-white py-2 !rounded-button hover:bg-custom-dark transition-colors">
+                        Manage Plan
+                    </button>
                 </div>
-                <div class="bg-white rounded-lg shadow mb-6">
-                    <div class="p-6">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead>
-                                    <tr class="text-left bg-gray-50">
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Order ID</th>
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Customer</th>
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Status</th>
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Amount</th>
-                                        <th
-                                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4">#ORD-1234</td>
-                                        <td class="px-6 py-4">Sarah Johnson</td>
-                                        <td class="px-6 py-4"><span
-                                                class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Completed</span>
-                                        </td>
-                                        <td class="px-6 py-4">$245.99</td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-[#4169E1] hover:text-[#27408B] !rounded-button">View
-                                                Details</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">#ORD-1235</td>
-                                        <td class="px-6 py-4">Michael Brown</td>
-                                        <td class="px-6 py-4"><span
-                                                class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                        </td>
-                                        <td class="px-6 py-4">$129.99</td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-[#4169E1] hover:text-[#27408B] !rounded-button">View
-                                                Details</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4">#ORD-1236</td>
-                                        <td class="px-6 py-4">Emily Wilson</td>
-                                        <td class="px-6 py-4"><span
-                                                class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Processing</span>
-                                        </td>
-                                        <td class="px-6 py-4">$349.99</td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-[#4169E1] hover:text-[#27408B] !rounded-button">View
-                                                Details</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Quick Actions</h3>
                 </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Inventory Alerts</h2>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg">
-                                <div class="flex items-center">
-                                    <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
-                                    <div>
-                                        <p class="font-medium text-red-800">Wireless Earbuds</p>
-                                        <p class="text-sm text-red-600">Only 2 items left in stock</p>
-                                    </div>
-                                </div>
-                                <button class="px-4 py-2 bg-red-500 text-white rounded !rounded-button">Restock</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
-                                <div class="flex items-center">
-                                    <i class="fas fa-exclamation-circle text-yellow-500 mr-3"></i>
-                                    <div>
-                                        <p class="font-medium text-yellow-800">Smart Watch</p>
-                                        <p class="text-sm text-yellow-600">5 items left in stock</p>
-                                    </div>
-                                </div>
-                                <button
-                                    class="px-4 py-2 bg-yellow-500 text-white rounded !rounded-button">Restock</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h2>
-                        <div class="space-y-4">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                                        <i class="fas fa-check text-green-500"></i>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-900">Order #1234 has been completed</p>
-                                    <p class="text-sm text-gray-500">2 minutes ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                        <i class="fas fa-user text-blue-500"></i>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-900">New customer registration</p>
-                                    <p class="text-sm text-gray-500">15 minutes ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                                        <i class="fas fa-bell text-yellow-500"></i>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-900">Low stock alert for Product #5678</p>
-                                    <p class="text-sm text-gray-500">1 hour ago</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <button
+                        class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
+                        <i class="fas fa-plus-circle text-custom text-xl mb-2"></i>
+                        <span class="text-sm text-gray-600">New Project</span>
+                    </button>
+                    <button
+                        class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
+                        <i class="fas fa-upload text-custom text-xl mb-2"></i>
+                        <span class="text-sm text-gray-600">Upload</span>
+                    </button>
+                    <button
+                        class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
+                        <i class="fas fa-users text-custom text-xl mb-2"></i>
+                        <span class="text-sm text-gray-600">Team</span>
+                    </button>
+                    <button
+                        class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
+                        <i class="fas fa-cog text-custom text-xl mb-2"></i>
+                        <span class="text-sm text-gray-600">Settings</span>
+                    </button>
                 </div>
-            </main>
+            </div>
         </div>
+    </main>
     </div>
-    <script>
-        const salesChart = echarts.init(document.getElementById('salesChart'));
-        const productsChart = echarts.init(document.getElementById('productsChart'));
-        const salesOption = {
-            animation: false,
-            tooltip: {
-                trigger: 'axis'
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'line',
-                smooth: true,
-                lineStyle: {
-                    color: '#4F46E5'
-                },
-                areaStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: 'rgba(79, 70, 229, 0.3)'
-                    }, {
-                        offset: 1,
-                        color: 'rgba(79, 70, 229, 0.1)'
-                    }])
-                }
-            }]
-        };
-        const productsOption = {
-            animation: false,
-            tooltip: {
-                trigger: 'item'
-            },
-            series: [{
-                type: 'pie',
-                radius: ['40%', '70%'],
-                data: [
-                    { value: 1048, name: 'Smartphones' },
-                    { value: 735, name: 'Laptops' },
-                    { value: 580, name: 'Tablets' },
-                    { value: 484, name: 'Accessories' }
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }]
-        };
-        salesChart.setOption(salesOption);
-        productsChart.setOption(productsOption);
-        window.addEventListener('resize', function () {
-            salesChart.resize();
-            productsChart.resize();
-        });
-    </script>
+</body>
 
-
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome Back</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
-        <script
-            src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
-        <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
-            data-border-radius="medium"></script>
-    </head>
-
-    <body class="bg-gray-50 min-h-screen">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-            <header class="py-6">
-                <nav class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <img src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a person with a warm smile against a neutral background, business attire, high quality studio lighting&width=48&height=48&flag=dcb7aa8e-8722-462f-a7a2-c7ee3ae0787d"
-                                alt="Profile" class="w-12 h-12 rounded-full object-cover border-2 border-custom">
-                        </div>
-                        <div>
-                            <p class="text-gray-500 text-sm font-medium">Welcome Back</p>
-                            <div class="flex items-center space-x-2">
-                                <h1 class="text-gray-900 text-xl font-semibold">Siren.uix</h1>
-                                <span
-                                    class="bg-custom bg-opacity-10 text-custom px-2 py-0.5 rounded-full text-xs font-medium">
-                                    <i class="fas fa-check-circle mr-1"></i>
-                                    Verified
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <button class="!rounded-button relative p-2 text-gray-600 hover:text-custom transition-colors">
-                            <i class="fas fa-shopping-cart text-xl"></i>
-                            <span
-                                class="absolute -top-1 -right-1 bg-custom text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
-                        </button>
-                    </div>
-                </nav>
-            </header>
-
-            <main class="py-8">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                    <div class="flex items-start space-x-6">
-                        <img src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a person with a warm smile against a neutral background, business attire, high quality studio lighting&width=120&height=120&flag=295924f4-7086-4095-b9b5-06a9568bd7eb"
-                            alt="Large Profile" class="w-28 h-28 rounded-full object-cover border-4 border-custom">
-                        <div>
-                            <div class="flex items-center space-x-3 mb-2">
-                                <h2 class="text-2xl font-bold text-gray-900">Siren.uix</h2>
-                                <span
-                                    class="bg-custom bg-opacity-10 text-custom px-3 py-1 rounded-full text-sm font-medium">
-                                    <i class="fas fa-check-circle mr-1"></i>
-                                    Premium Member
-                                </span>
-                            </div>
-                            <p class="text-gray-600 mb-4">UI/UX Designer • Digital Creator</p>
-                            <div class="flex space-x-4">
-                                <div class="text-center">
-                                    <p class="text-2xl font-bold text-gray-900">248</p>
-                                    <p class="text-sm text-gray-500">Projects</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-2xl font-bold text-gray-900">12.4k</p>
-                                    <p class="text-sm text-gray-500">Followers</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-2xl font-bold text-gray-900">542</p>
-                                    <p class="text-sm text-gray-500">Following</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
-                            <button class="text-custom hover:text-custom-dark">
-                                <i class="fas fa-ellipsis-h"></i>
-                            </button>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
-                                    <i class="fas fa-heart text-custom"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-900">Liked Design System</p>
-                                    <p class="text-xs text-gray-500">2 minutes ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
-                                    <i class="fas fa-comment text-custom"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-900">Commented on UI Kit</p>
-                                    <p class="text-xs text-gray-500">1 hour ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-custom bg-opacity-10 p-2 rounded-lg">
-                                    <i class="fas fa-share text-custom"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-900">Shared New Project</p>
-                                    <p class="text-xs text-gray-500">3 hours ago</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Current Plan</h3>
-                            <span class="bg-custom text-white px-3 py-1 !rounded-button text-sm">Premium</span>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-check-circle text-custom"></i>
-                                <p class="text-sm text-gray-600">Unlimited Projects</p>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-check-circle text-custom"></i>
-                                <p class="text-sm text-gray-600">Advanced Analytics</p>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-check-circle text-custom"></i>
-                                <p class="text-sm text-gray-600">Priority Support</p>
-                            </div>
-                            <button
-                                class="w-full bg-custom text-white py-2 !rounded-button hover:bg-custom-dark transition-colors">
-                                Manage Plan
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-sm p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Quick Actions</h3>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <button
-                                class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
-                                <i class="fas fa-plus-circle text-custom text-xl mb-2"></i>
-                                <span class="text-sm text-gray-600">New Project</span>
-                            </button>
-                            <button
-                                class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
-                                <i class="fas fa-upload text-custom text-xl mb-2"></i>
-                                <span class="text-sm text-gray-600">Upload</span>
-                            </button>
-                            <button
-                                class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
-                                <i class="fas fa-users text-custom text-xl mb-2"></i>
-                                <span class="text-sm text-gray-600">Team</span>
-                            </button>
-                            <button
-                                class="!rounded-button flex flex-col items-center justify-center p-4 border-2 border-gray-100 hover:border-custom transition-colors">
-                                <i class="fas fa-cog text-custom text-xl mb-2"></i>
-                                <span class="text-sm text-gray-600">Settings</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </body>
-
-    </html>
+</html>

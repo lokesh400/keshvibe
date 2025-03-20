@@ -34,7 +34,7 @@ router.get("/my/cart",ensureAuthenticated,(req,res)=> {
     res.redirect(`/cart/${req.user._id}`);
 })
 
-router.get('/this/project/:id', async (req, res) => {
+router.get('/this/product/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         const reviews = await Review.find({ product: req.params.id })
@@ -45,8 +45,6 @@ router.get('/this/project/:id', async (req, res) => {
             category: product.category,
             _id: { $ne: req.params.id },
         });
-  
-        // Fetch reviews for related products and calculate avgRating
         relatedProducts = await Promise.all(relatedProducts.map(async (prod) => {
             const review = await Review.find({ product: prod._id });
             prod = prod.toObject(); // Convert Mongoose document to plain object
@@ -55,24 +53,18 @@ router.get('/this/project/:id', async (req, res) => {
                 : 0;
             return prod;
         }));
-  
-        // Sort related products: highest rating first, then latest
         relatedProducts.sort((a, b) => {
             if (b.avgRating === a.avgRating) {
                 return new Date(b.createdAt) - new Date(a.createdAt); // Newest first
             }
             return b.avgRating - a.avgRating; // Highest rating first
         });
-  
-        // Limit to 4 products
         relatedProducts = relatedProducts.slice(0, 4);
-  
         res.render('thisProduct.ejs', {
             product,
             reviews,
             relatedProducts
         });
-  
     } catch (err) {
         console.error("Error fetching product: ", err);
         res.status(500).send('Server error');
@@ -84,29 +76,23 @@ router.get('/this/project/:id', async (req, res) => {
 router.post("/add-to-cart", async (req, res) => {
     try {
         const { userId, productId, quantity, size } = req.body;
-        // Validate input data
         if (!userId || !productId || !quantity || !size) {
             return res.status(400).json({ message: "User ID, Product ID, Quantity, and Size are required." });
         }
-        // Check if product exists
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found." });
         }
-        // Find user's cart or create a new one
         let cart = await Cart.findOne({ user: userId });
         if (!cart) {
             cart = new Cart({ user: userId, items: [] });
         }
-        // Check if product with the same size already exists in cart
         const itemIndex = cart.items.findIndex(
             item => item.product.toString() === productId && item.size === size
         );
         if (itemIndex > -1) {
-            // If the same product with the same size exists, update quantity
             cart.items[itemIndex].quantity += parseInt(quantity);
         } else {
-            // Otherwise, add a new entry with the selected size
             cart.items.push({ product: productId, price: product.price, quantity: parseInt(quantity), size });
         }
         await cart.save();
@@ -122,19 +108,14 @@ router.post("/add-to-cart", async (req, res) => {
 router.post("/update-quantity", async (req, res) => {
     try {
         const { userId, productId, change } = req.body;
-
         if (!userId || !productId || change === undefined) {
             return res.status(400).json({ message: "Missing required fields" });
         }
-
         let cart = await Cart.findOne({ user: userId });
         if (!cart) return res.status(404).json({ message: "Cart not found" });
-
         const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
         if (itemIndex === -1) return res.status(404).json({ message: "Item not found in cart" });
-
         cart.items[itemIndex].quantity += change;
-
         if (cart.items[itemIndex].quantity <= 0) {
             cart.items.splice(itemIndex, 1); // Remove item if quantity is 0
         }
@@ -281,55 +262,5 @@ router.get("/my/order-success", (req,res)=>{
     res.render('orderPlaced.ejs');
 })
 
-
-// Route to render the Add Address Page
-router.get("/add-address", (req, res) => {
-    res.render("add-address", { 
-        currUser: req.user,  // Pass the logged-in user
-        isEdit: false  // Explicitly set isEdit to false
-    });
-});
-
-// Handle Address Submission
-router.post('/add-address', async (req, res) => {
-    const { street, city, state, pincode, mobile } = req.body;
-    console.log(req.body);
-    try {
-        await User.findByIdAndUpdate(req.user._id, {
-            address: { street, city, state, pincode },
-            mobile
-        });
-        res.redirect(`/cart/${req.user._id}`);
-    } catch (err) {
-        console.error(err);
-        res.redirect('/add-address');
-    }
-});
-
-// Route to render the Edit Address Page
-router.get("/edit-address", (req, res) => {
-    if (!req.user.address) {
-        return res.redirect("/add-address");
-    }
-    res.render("add-address", { 
-        currUser: req.user, 
-        isEdit: true  // Set isEdit to true for edit mode
-    });
-});
-
-// Handle Address Update
-router.post('/edit-address', async (req, res) => {
-    const { street, city, state, pincode, mobile } = req.body;
-    try {
-        await User.findByIdAndUpdate(req.user._id, {
-            address: { street, city, state, pincode },
-            mobile
-        });
-        res.redirect(`/cart/${req.user._id}`);
-    } catch (err) {
-        console.error(err);
-        res.redirect('/edit-address');
-    }
-});
 
 module.exports = router;

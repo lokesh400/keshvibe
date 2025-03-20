@@ -50,10 +50,10 @@ router.post("/login", async (req, res, next) => {
     })(req, res, next);
 });
 
-router.get("/admin", async(req,res)=>{
-    const cars = await Car.find({});
-    res.render("./admin-dashboard.ejs",{cars})
-})
+// router.get("/admin", async(req,res)=>{
+//     const cars = await Car.find({});
+//     res.render("./admin-dashboard.ejs",{cars})
+// })
 
 // Logout route
 router.get("/logout", (req, res, next) => {
@@ -119,5 +119,10 @@ router.post("/add/new/query", async (req, res) => {
         res.redirect('/');
     }
 });
+
+router.get('/details', async(req,res)=>{
+    const user = req.user;
+    res.render('users/userDetails.ejs',{user})
+})
 
 module.exports = router;
