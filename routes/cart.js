@@ -7,7 +7,8 @@ const Order = require("../models/Order");
 const Review = require("../models/Review");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const User = require("../models/User")
+const User = require("../models/User");
+const {isLoggedIn,saveRedirectUrl,isAdmin,ensureAuthenticated} = require('../middlewares/login.js');
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -15,22 +16,9 @@ const razorpay = new Razorpay({
     key_secret: process.env.rzp_key_secret
 });
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.render('errorLogin.ejs')
-  }
-  
-  function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role === 'admin') {
-      return next();
-    }
-    res.render("components/error/accessdenied.ejs");
-  }
 
 //pre login route
-router.get("/my/cart",ensureAuthenticated,(req,res)=> {
+router.get("/my/cart",isLoggedIn,(req,res)=> {
     res.redirect(`/cart/${req.user._id}`);
 })
 
@@ -207,7 +195,7 @@ router.get("/my/order-success", (req,res)=>{
 })
 
 // 📦 Get Cart Items
-router.get("/cart/:userId", async (req, res) => {
+router.get("/cart/:userId",isLoggedIn, async (req, res) => {
     try {
         const cart = await Cart.findOne({ user: req.params.userId }).populate("items.product");
         if (!cart) {

@@ -5,15 +5,7 @@ const passport = require("passport");
 const nodemailer = require('nodemailer');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Otp = require('../models/Otp');
-// const Car = require('../models/car');
-// const Query = require('../models/Query')
-
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.redirect('/user/login');
-  }
+const {isLoggedIn,saveRedirectUrl,isAdmin,ensureAuthenticated} = require('../middlewares/login.js');
 
 // Login route
 router.get("/login", (req, res) => {
@@ -24,28 +16,25 @@ router.get("/login", (req, res) => {
     res.render("./users/login.ejs");
 });
 
-router.post("/login", async (req, res, next) => {
-    // Passport Authentication manually
+router.post("/login", saveRedirectUrl, (req, res, next) => {
     passport.authenticate("local", async (err, user, info) => {
         if (err) {
             console.error("Error during authentication:", err);
             req.flash('error_msg', 'Something went wrong. Please try again.');
-            return res.redirect("/user/login"); // Redirect back to login if there was an error
+            return res.redirect("/user/login");
         }
         if (!user) {
-            req.flash('error_msg', info.message || 'Invalid credentials. Please check your username and password.');
-            return res.redirect("/user/login"); // Invalid login credentials
+            req.flash('error_msg', info.message || 'Invalid credentials.');
+            return res.redirect("/user/login");
         }
-        // If login is successful, log in the user
-        req.login(user, async (err) => {
+        req.login(user, (err) => {
             if (err) {
                 console.error("Login failed:", err);
                 req.flash('error_msg', 'Login failed. Please try again.');
                 return res.redirect("/user/login");
             }
-            // Flash a success message and redirect based on user role
-            req.flash('success_msg', 'You have successfully logged in!');
-            res.redirect("/all/cars"); // Redirect to admin dashboard
+            req.flash('success_msg', 'Successfully logged in!');
+            res.redirect(res.locals.RedirectUrl);
         });
     })(req, res, next);
 });

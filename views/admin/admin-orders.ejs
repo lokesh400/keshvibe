@@ -4,27 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
-        rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet" />
-    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
-    <script
-        src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1">
-        </script>
-    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
-        data-border-radius="medium">
-        </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-
-<body>
-    <!-- Navbar -->
+<body class="bg-gray-100">
+    <!-- Sidebar -->
     <%- include('../components/sidebar.ejs') %>
 
-    <main class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style=" margin-left: 254px; width: calc(100% - 254px);">
+    <!-- Main Content -->
+    <main class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style="margin-left: 254px; width: calc(100% - 254px);">
         <h1 class="text-2xl font-semibold text-gray-900 mb-6">All Orders</h1>
 
         <!-- Filters & Print Button -->
@@ -80,16 +73,17 @@
         </div>
     </main>
 
+    <!-- Scripts -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const orders = <%- JSON.stringify(orders) %>;
 
             // Generate QR codes
-            orders.forEach(order => { 
+            orders.forEach(order => {
                 const qrDiv = document.getElementById(`qr-${order._id}`);
                 if (qrDiv) {
                     new QRCode(qrDiv, {
-                        text: `http://192.168.21.198:666/order-details/${order._id}`,
+                        text: `http://192.168.95.198:666/order/details/${order._id}`,
                         width: 80,
                         height: 80
                     });
@@ -106,54 +100,69 @@
         });
 
         function printPendingOrders() {
-            let pendingOrders = [];
-            let printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Print QR Codes</title></head><body>');
-            printWindow.document.write('<h2>Pending Orders QR Codes</h2>');
+    let pendingOrders = [];
+    let printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Print QR Codes</title></head><body>');
+    printWindow.document.write('<h2>Pending Orders QR Codes</h2>');
 
-            document.querySelectorAll(".order-row[data-status='pending']").forEach(row => {
-                let orderId = row.cells[0].innerText;
-                let customer = row.cells[1].innerText;
-                let qrCanvas = row.querySelector(".qr-code canvas");
+    // Collect pending orders and generate QR codes
+    document.querySelectorAll(".order-row[data-status='pending']").forEach(row => {
+        let orderId = row.cells[0].innerText;
+        let customer = row.cells[1].innerText;
+        let qrCanvas = row.querySelector(".qr-code canvas");
 
-                pendingOrders.push(orderId);
+        pendingOrders.push(orderId); // Collect the order IDs
 
-                printWindow.document.write(`<p><b>Order ID:</b> ${orderId} | <b>Customer:</b> ${customer}</p>`);
-                if (qrCanvas) {
-                    let qrImg = qrCanvas.toDataURL("image/png");
-                    printWindow.document.write(`<img src="${qrImg}" style="width:100px; height:100px;">`);
-                }
-                printWindow.document.write(`<hr>`);
-            });
-
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-
-            printWindow.onload = function () {
-                printWindow.print();
-                printWindow.onafterprint = function () {
-                    if (pendingOrders.length > 0) {
-                        fetch("/admin/orders/mark-printed", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ orderIds: pendingOrders })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert("Orders marked as printed successfully.");
-                                location.reload();
-                            } else {
-                                alert("Error updating orders: " + data.message);
-                            }
-                        })
-                        .catch(error => console.error("Error:", error));
-                    } else {
-                        alert("No pending orders found for printing.");
-                    }
-                };
-            };
+        printWindow.document.write(`<p><b>Order ID:</b> ${orderId} | <b>Customer:</b> ${customer}</p>`);
+        if (qrCanvas) {
+            let qrImg = qrCanvas.toDataURL("image/png");
+            printWindow.document.write(`<img src="${qrImg}" style="width:100px; height:100px;">`);
         }
+        printWindow.document.write(`<hr>`);
+    });
+
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    // Debug: Log pendingOrders
+    console.log("Pending Orders Detected:", pendingOrders);
+
+    // Handle the print action
+    printWindow.onload = function () {
+        printWindow.print();
+
+        // Ask for confirmation after the print/save dialog
+        if (pendingOrders.length > 0) {
+            const userConfirmed = confirm(
+                `You are about to mark the following orders as printed: ${pendingOrders.join(", ")}.\n\nProceed?`
+            );
+
+            if (userConfirmed) {
+                // Make the fetch request to update order statuses
+                fetch("/admin/print/orders/mark-printed", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ orderIds: pendingOrders })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Orders marked as printed successfully.");
+                        location.reload();
+                    } else {
+                        alert("Error updating orders: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            } else {
+                alert("No orders were marked as printed.");
+            }
+        } else {
+            alert("No pending orders found for printing.");
+        }
+    };
+}
+
     </script>
 </body>
 </html>

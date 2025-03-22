@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const router = express.Router();
+const {isLoggedIn,saveRedirectUrl,isAdmin,ensureAuthenticated} = require('../middlewares/login.js');
 
 router.get("/admin", async (req, res) => {
   const orders = await Order.find()
@@ -76,7 +77,7 @@ router.post("/admin/orders/update-status/:id", async (req, res) => {
   }
 });
 
-router.get("/order-details/:orderId", async (req, res) => {
+router.get("/order/details/:orderId",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const orderId = req.params.orderId;
     const order = await Order.findById(orderId)
@@ -94,29 +95,24 @@ router.get("/order-details/:orderId", async (req, res) => {
   }
 });
 
-router.post("/admin/orders/mark-printed", async (req, res) => {
+
+router.post('/admin/print/orders/mark-printed', async (req, res) => {
   try {
-    const { orderIds } = req.body;
+      const { orderIds } = req.body; // Get the order IDs from the request body
+      if (!orderIds || orderIds.length === 0) {
+          return res.status(400).json({ success: false, message: 'No order IDs provided.' });
+      }
 
-    if (!orderIds || orderIds.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No orders provided." });
-    }
+      // Update the status of the orders to 'printed' (or any desired status)
+      await Order.updateMany(
+          { _id: { $in: orderIds } }, // Match orders with these IDs
+          { $set: { status: 'printed' } } // Update their status
+      );
 
-    // ✅ Update only orders that are still "pending"
-    const result = await Order.updateMany(
-      { _id: { $in: orderIds }, status: "pending" },
-      { $set: { status: "printed" } }
-    );
-
-    res.json({
-      success: true,
-      message: `Updated ${result.modifiedCount} orders to 'printed'`,
-    });
+      res.json({ success: true, message: 'Orders marked as printed.' });
   } catch (error) {
-    console.error("Error updating orders:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+      console.error('Error updating orders:', error);
+      res.status(500).json({ success: false, message: 'Failed to update orders.' });
   }
 });
 
@@ -134,7 +130,7 @@ router.get("/admin/orders/count", async (req, res) => {
   }
 });
 
-router.post("/order-details/:orderId", async (req, res) => {
+router.post("/order-details/:orderId",async (req, res) => {
   try {
     const { status } = req.body;
     await Order.findByIdAndUpdate(req.params.orderId, { status });
