@@ -152,10 +152,10 @@
                 </div>
                 <div class="grid grid-cols-4 gap-4">
 
-                    <%for(let i=0; i++ ; i< product.images.length){%>
+                    <%for(let i=0 ; i< product.images.length; i++ ){%>
                         <button
                             class="aspect-w-1 aspect-h-1 bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-custom focus:outline-none">
-                            <img src="<%= product.images[i].length %>" alt="Detail 1" class="object-cover" />
+                            <img src="<%= product.images[i] %>" alt="Detail 1" class="object-cover" />
                         </button>
                         <%}%>
 
@@ -306,23 +306,29 @@
 
     <script>
 
-        function shareProduct() {
-            const currentURL = window.location.href; // Get the current page link
-            const productTitle = document.title;
-            if (navigator.share) {
-                navigator.share({
-                    title: productTitle,
-                    url: currentURL
-                }).then(() => console.log("Shared successfully!"))
-                    .catch((error) => console.log("Sharing failed:", error));
-            } else {
-                navigator.clipboard.writeText(currentURL).then(() => {
-                    alert("🔗 Link copied to clipboard!");
-                }).catch(err => {
-                    console.error("Error copying link:", err);
-                });
-            }
-        }
+function shareProduct() {
+    const currentURL = window.location.href; // Get the current page link
+    const productTitle = document.title;
+
+    if (navigator.share) {
+        navigator.share({
+            title: productTitle || "Check out this product!",
+            url: currentURL
+        }).then(() => console.log("Shared successfully!"))
+          .catch((error) => {
+              console.error("Sharing failed:", error);
+              alert("Sharing is not supported or failed.");
+          });
+    } else {
+        navigator.clipboard.writeText(currentURL).then(() => {
+            alert("🔗 Link copied to clipboard!");
+        }).catch(err => {
+            console.error("Error copying link:", err);
+            alert("Failed to copy link to clipboard.");
+        });
+    }
+}
+
 
         document.addEventListener("DOMContentLoaded", function () {
             const sizeButtons = document.querySelectorAll(".size-button");

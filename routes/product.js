@@ -129,19 +129,22 @@ router.get("/search/products", async (req, res) => {
     const query = req.query.query; // Get search term from URL
     if (!query || query.trim() === "") {
       return res.redirect("/search-error");
-  }
-      const products = await Product.find({
-        $or: [
-            { name: { $regex: query, $options: "i" } },
-            { category: { $regex: query, $options: "i" } },
-            { keywords: { $elemMatch: { $regex: query, $options: "i" } } }
-        ]
-    });
-      res.render("search", { products }); // Render with products
+    }
+    const terms = query.trim().split(" ").map((term) => ({
+      $or: [
+        { name: { $regex: term, $options: "i" } },
+        { category: { $regex: term, $options: "i" } },
+        { keywords: { $elemMatch: { $regex: term, $options: "i" } } }
+      ]
+    }));
+    const products = await Product.find({ $and: terms });
+    res.render("search", { products });
   } catch (error) {
-      res.status(500).json({ message: "Server error", error });
+    console.error("Error during search:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 //searcherror
 router.get("/search-error", (req,res)=>{
@@ -181,7 +184,7 @@ router.get('/madefor/category/products/category/:men', async (req,res)=>{
 })
 
 router.get('/madefor/category/products/category/:women', async (req,res)=>{
-  const products = await Product.find({madeFor:"Women"});
+  const products = await Product.find({madeFor:"women"});
   res.render("search", { products });
 })
 

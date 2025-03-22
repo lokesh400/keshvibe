@@ -138,6 +138,7 @@ app.get("/", async (req,res)=>{
 //   res.json(products);
 // });
 
+
 app.get("/aboutus", (req,res)=>{
   res.render('aboutUs.ejs');
 })
