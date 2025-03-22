@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
       price: { type: Number, required: true }
     }
   ],
+  deliveryCharges: {type:Number, default:80},
   totalAmount: { type: Number, required: true },
   status: { type: String, enum: ["pending", "packed", "shipped", "delivered","printed"], default: "pending" },
   paymentStatus: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },

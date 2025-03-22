@@ -142,32 +142,13 @@ router.delete("/delete/this/product", async (req, res) => {
     }
 });
 
-// 📦 Get Cart Items
-router.get("/cart/:userId", async (req, res) => {
-    try {
-        const cart = await Cart.findOne({ user: req.params.userId }).populate("items.product");
-        if (!cart) {
-            return res.render('cart.ejs', { cart: { items: [] }, totalAmount: 0, keyId: process.env.rzp_key_id });
-        }
-        let totalAmount = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        res.render('cart.ejs', { cart, totalAmount, keyId: process.env.rzp_key_id });
-    } catch (error) {
-        console.error("Error fetching cart:", error);
-        res.status(500).json({ message: "Server error", error });
-    }
-});
-
-
-
 // 🔥 Create Razorpay Order
 router.post("/cart/create-order", async (req, res) => {
     const { userId } = req.body;
     try {
         const cart = await Cart.findOne({ user: userId }).populate("items.product");
         if (!cart || cart.items.length === 0) return res.status(400).json({ message: "Cart is empty" });
-
-        const totalAmount = cart.items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-
+        const totalAmount = cart.items.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + cart.deliveryCharges;
         const options = {
             amount: totalAmount * 100, // Razorpay requires amount in paise
             currency: "INR",
@@ -180,45 +161,7 @@ router.post("/cart/create-order", async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error creating order", error });
     }
-})
-
-// ✅ Verify Payment & Clear Cart
-// router.post("/cart/verify-payment", async (req, res) => {
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } = req.body;
-
-//     const generatedSignature = crypto.createHmac("sha256", process.env.rzp_key_secret)
-//         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-//         .digest("hex");
-
-//     if (generatedSignature !== razorpay_signature) {
-//         return res.status(400).json({ message: "Invalid payment signature" });
-//     }
-
-//     try {
-//         // ✅ Clear the cart after successful payment
-//         await Cart.deleteOne({ user:req.user._id});
-//         res.json({ message: "Payment successful! Order placed." });
-
-//     } catch (error) {
-//         res.status(500).json({ message: "Error clearing cart", error });
-//     }
-// });
-
-// const cart = await Cart.findOne({user:req.user._id});
-//         // console.log(cart)
-//         // const newOrder = new Order({
-//         //     user: userId,
-//         //     products: cart.items.map(item => ({
-//         //         product: item.product._id,
-//         //         quantity: item.quantity
-//         //     })),
-//         //     totalAmount: cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0),
-//         //     paymentStatus: "paid",
-//         //     status: "pending"
-//         // });
-//         // console.log(newOrder)
-//         // await newOrder.save();
-
+});
 
 router.post("/cart/verify-payment", async (req, res) => {
     try {
@@ -263,5 +206,63 @@ router.get("/my/order-success", (req,res)=>{
     res.render('orderPlaced.ejs');
 })
 
+// 📦 Get Cart Items
+router.get("/cart/:userId", async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ user: req.params.userId }).populate("items.product");
+        if (!cart) {
+            // Render empty cart if no cart is found
+            return res.render('cart.ejs', { cart: { items: [] }, totalAmount: 0, keyId: process.env.rzp_key_id });
+        }
+        if (cart.subTotal > 1000) {
+            cart.deliveryCharges = 0; // Set delivery charges to 0
+        } else {
+            cart.deliveryCharges = 80; // Default delivery charges
+        }
+        cart.totalCharges = cart.subTotal + cart.deliveryCharges;
+        await cart.save();
+        const totalAmount = cart.totalCharges;
+        console.log(cart.length);
+        res.render('cart.ejs', { cart, totalAmount, keyId: process.env.rzp_key_id });
+    } catch (error) {
+        console.error("Error fetching cart:", error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+
+//get delivery charges
+router.get('/get/delivery/charges', async(req,res)=>{
+    try{
+        const cart = await Cart.findOne({user:req.user._id});
+    if(!cart){
+        res.json({message:"no cart found"})
+    }
+    res.json({charge:cart.deliveryCharges});
+    } catch (error){
+        console.log(error)
+    }
+})
+
+//update delivery charges of cart
+router.get('/update/cart', async(req,res)=> {
+  const userId = req.user._id;  
+  try {
+    const updatedCart = await Cart.findOneAndUpdate(
+      { user: userId }, // Filter by user ID
+      { deliveryCharges: 80 }, // Update delivery charges
+      { new: true } // Return the updated document
+    );
+    if (!updatedCart) {
+      console.log("Cart not found for this user.");
+    }
+    console.log("Updated Cart:", updatedCart);
+    // return updatedCart;
+  } catch (error) {
+    console.error("Error updating delivery charges:", error);
+    throw error;
+  }
+
+})
 
 module.exports = router;
