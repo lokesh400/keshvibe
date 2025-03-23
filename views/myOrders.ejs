@@ -17,7 +17,7 @@
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div>
-                    <a href="/" class="text-lg font-semibold text-gray-900">MyShop</a>
+                    <a href="/" class="text-lg font-semibold text-gray-900">Kesh Vibe</a>
                 </div>
                 <a href="/" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                     <i class="fas fa-shopping-cart mr-2"></i>Continue Shopping
@@ -54,7 +54,7 @@
                         <% order.products.forEach(item => { %>
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex items-center gap-6">
-                                <a href="/this/project/<%= item.product._id %>">
+                                <a href="/this/product/<%= item.product._id %>">
                                     <img src="<%= item.product.coverPhoto %>" class="w-20 h-20 object-cover rounded-lg" alt="Product">
                                 </a>
                                 <div>
@@ -66,7 +66,7 @@
                                 <p class="text-sm font-medium text-gray-900">₹<%= item.product.price %></p>
                                 <p class="mt-1 text-sm text-gray-500">Qty: <%= item.quantity %></p>
                             </div>
-                            <a href="/add/review/<%= item.product._id %>"> Add review </a>
+                            <a style="background-color: black; color: white; border-radius: 5px; padding: 5px;" href="/add/review/<%= item.product._id %>"> Add review </a>
                         </div>
                         <% }); %>
 

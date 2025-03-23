@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modern E-commerce Store</title>
+    <title>Kesh Vibe</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet" />
     <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/toast.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
     <script
         src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1">
@@ -98,6 +101,16 @@
                 width: 0%;
             }
         }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 
@@ -121,9 +134,11 @@
                             <div class="text-center text-white">
                                 <h2 class="text-4xl font-bold mb-4">Summer Collection 2024</h2>
                                 <p class="text-xl mb-8">Up to 50% off on selected items</p>
-                                <button
-                                    class="!rounded-button bg-custom hover:bg-custom/90 text-white px-8 py-3 text-lg font-medium">Shop
-                                    Now</button>
+                                <a href="/all/products">
+                                    <button
+                                        class="!rounded-button bg-custom hover:bg-custom/90 text-white px-8 py-3 text-lg font-medium">Shop
+                                        Now</button>
+                                </a>
                             </div>
                         </div>
                     </li>
@@ -141,13 +156,12 @@
         <section class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h2 class="text-2xl font-bold mb-8">Shop by Category</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <a href="/madefor/category/products/catrgory/:women" class="group">
+                <a href="/madefor/category/products/category/:women" class="group">
                     <div
                         class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
                         <img src="/images/wc.jpg" class="w-full h-48 object-cover" alt="Women" />
                         <div class="p-4">
                             <h3 class="font-medium text-gray-900 group-hover:text-custom">Women</h3>
-                            <p class="text-sm text-gray-500">1,234 items</p>
                         </div>
                     </div>
                 </a>
@@ -157,17 +171,15 @@
                         <img src="/images/mc.jpg" class="w-full h-48 object-cover" alt="Men" />
                         <div class="p-4">
                             <h3 class="font-medium text-gray-900 group-hover:text-custom">Men</h3>
-                            <p class="text-sm text-gray-500">987 items</p>
                         </div>
                     </div>
                 </a>
-                <a href="/madefor/category/products/category/this/:kids" class="group">
+                <a href="/madefor/category/products/category/this/:unisex" class="group">
                     <div
                         class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
                         <img src="/images/kc.jpg" class="w-full h-48 object-cover" alt="Kids" />
                         <div class="p-4">
                             <h3 class="font-medium text-gray-900 group-hover:text-custom">Kids</h3>
-                            <p class="text-sm text-gray-500">567 items</p>
                         </div>
                     </div>
                 </a>
@@ -213,7 +225,7 @@
                                 onclick="filterCategory('<%= category %>')">
                                 <%= category %>
                             </button>
-                            <% }); %>
+                        <% }); %>
                 </div>
             </div>
 
@@ -240,7 +252,7 @@
                                 </h3>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-custom font-medium">Rs <%= product.price %> /-</span>
-                                    <span class="ml-2 text-sm text-gray-500 line-through">$79.99</span>
+                                    <span class="ml-2 text-sm text-gray-500 line-through">Rs <%= 2*product.price %></span>
                                 </div>
                             </div>
                         </div>
@@ -260,54 +272,59 @@
 
         </section>
 
-        <section class="bg-white">
-            <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
-                        <p class="text-gray-600 mb-6">Get the latest updates about new products and upcoming sales.</p>
-                        <form class="space-y-4">
-                            <div class="relative">
-                                <input type="email"
-                                    class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-custom focus:border-custom"
-                                    placeholder="Enter your email" />
-                                <button type="submit"
-                                    class="!rounded-button absolute right-2 top-1/2 transform -translate-y-1/2 bg-custom hover:bg-custom/90 text-white px-4 py-2">Subscribe</button>
+        <%- include('components/toast.ejs') %>
+
+            <section class="bg-white">
+                <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
+                            <p class="text-gray-600 mb-6">Get the latest updates about new products and upcoming
+                                sales.</p>
+                            <form class="space-y-4" action="/user/subscribe/to/newsletter" method="POST"
+                                id="newsletterForm">
+                                <div class="relative">
+                                    <input type="email" required name="email"
+                                        class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-custom focus:border-custom"
+                                        placeholder="Enter your email" />
+                                    <button type="submit" id="subscribeButton"
+                                        class="!rounded-button absolute right-2 top-1/2 transform -translate-y-1/2 bg-custom hover:bg-custom/90 text-white px-4 py-2">
+                                        Subscribe
+                                    </button>
+                                </div>
+                                <!-- Loading Spinner -->
+                                <div id="loadingSpinner" class="hidden text-center mt-2">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-custom">
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-1">Submitting...</p>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <i class="fas fa-truck text-3xl text-custom mb-4"></i>
+                                <h3 class="font-medium mb-2">Free Shipping</h3>
+                                <p class="text-sm text-gray-600">On orders over Rs 1000/-</p>
                             </div>
-                            <div class="flex items-start">
-                                <input type="checkbox"
-                                    class="mt-1 h-4 w-4 rounded border-gray-300 text-custom focus:ring-custom" />
-                                <label class="ml-2 text-sm text-gray-600">I agree to receive promotional emails and
-                                    accept the <a href="#" class="text-custom hover:underline">Privacy
-                                        Policy</a></label>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <i class="fas fa-undo text-3xl text-custom mb-4"></i>
+                                <h3 class="font-medium mb-2">Easy Returns</h3>
+                                <p class="text-sm text-gray-600">2 days return policy</p>
                             </div>
-                        </form>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <i class="fas fa-truck text-3xl text-custom mb-4"></i>
-                            <h3 class="font-medium mb-2">Free Shipping</h3>
-                            <p class="text-sm text-gray-600">On orders over $50</p>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <i class="fas fa-undo text-3xl text-custom mb-4"></i>
-                            <h3 class="font-medium mb-2">Easy Returns</h3>
-                            <p class="text-sm text-gray-600">30-day return policy</p>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <i class="fas fa-lock text-3xl text-custom mb-4"></i>
-                            <h3 class="font-medium mb-2">Secure Payment</h3>
-                            <p class="text-sm text-gray-600">100% secure checkout</p>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <i class="fas fa-headset text-3xl text-custom mb-4"></i>
-                            <h3 class="font-medium mb-2">24/7 Support</h3>
-                            <p class="text-sm text-gray-600">Here to help you</p>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <i class="fas fa-lock text-3xl text-custom mb-4"></i>
+                                <h3 class="font-medium mb-2">Secure Payment</h3>
+                                <p class="text-sm text-gray-600">100% secure checkout</p>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <i class="fas fa-headset text-3xl text-custom mb-4"></i>
+                                <h3 class="font-medium mb-2">24/7 Support</h3>
+                                <p class="text-sm text-gray-600">Here to help you</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
     </main>
     <footer class="bg-gray-900 text-white">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -338,24 +355,12 @@
                         <a href="#" class="text-gray-400 hover:text-white">
                             <i class="fab fa-twitter text-xl"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
+                        <a href="https://www.instagram.com/keshvibe.in?igsh=MWowcTUxaDVnczRpNg==&utm_source=ig_contact_invite"
+                            class="text-gray-400 hover:text-white">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
                         <a href="#" class="text-gray-400 hover:text-white">
                             <i class="fab fa-pinterest text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Download Our App</h3>
-                    <div class="space-y-4">
-                        <a href="#" class="block">
-                            <img src="https://ai-public.creatie.ai/gen_page/app-store-badge.png"
-                                alt="Download on the App Store" class="h-10" />
-                        </a>
-                        <a href="#" class="block">
-                            <img src="https://ai-public.creatie.ai/gen_page/google-play-badge.png"
-                                alt="Get it on Google Play" class="h-10" />
                         </a>
                     </div>
                 </div>
@@ -367,8 +372,8 @@
             </div>
         </div>
     </footer>
+    <script src="js/toast.js"></script>
     <script>
-
         let page = 2; // Start loading from page 2 since page 1 is already loaded
         function filterCategory(category) {
             document.querySelectorAll(".product-card").forEach(card => {
@@ -411,6 +416,20 @@
             animationTimingFunc: 'ease-in-out',
             gap: 0
         }).mount();
+
+        const form = document.getElementById('newsletterForm');
+        const subscribeButton = document.getElementById('subscribeButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // Add submit event listener to the form
+        form.addEventListener('submit', function (event) {
+            // Show the loading spinner
+            loadingSpinner.classList.remove('hidden');
+
+            // Disable the subscribe button to prevent multiple submissions
+            subscribeButton.disabled = true;
+            subscribeButton.textContent = "Submitting...";
+        });
     </script>
 </body>
 

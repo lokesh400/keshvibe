@@ -164,12 +164,6 @@ router.get("/madefor/category/products", async (req, res) => {
             { madefor: { $regex: query, $options: "i" } },
         ]
     });
-      // Check if category is provided in the query string
-      // if (req.query.category) {
-      //     filter.category = req.query.category; // Filter products by category
-      // }
-
-      // const products = await Product.find(filter); // Fetch products based on filter
       res.render("search", { products });
   } catch (error) {
       console.error("Error fetching products:", error);
@@ -196,59 +190,6 @@ router.get('/madefor/category/products/category/this/:kids', async (req,res)=>{
 router.get("/product/management", async (req, res) => {
   const products = await Product.find();
   res.render("admin/allProducts.ejs", { products });
-});
-
-// Edit a product
-router.post("/admin/edit/:id", async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id, {
-    name: req.body.name,
-    price: req.body.price,
-    category: req.body.category,
-  });
-  res.redirect("/product/management");
-});
-
-// Delete a product
-router.post("/admin/delete/:id", async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.redirect("/product/management");
-});
-
-// Route to display product form
-router.get("/add/new/product", (req, res) => {
-  res.render("admin/addProduct.ejs"); // Renders views/index.ejs
-});
-
-
-router.post("/add-product", upload.single("file"), async (req, res) => {
-  try {
-    const { name, price, stock, description, category,sizes } = req.body;
-    const sizesArray = sizes ? sizes.split(",").map(size => size.trim()) : [];
-    const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
-    const imageUrl = result.secure_url;
-    fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.error("Error deleting local file:", err);
-      } else {
-        console.log("Local file deleted successfully");
-      }
-    });
-    const newCar = new Product({
-      name,
-      price,
-      stock,
-      description,
-      category,
-      sizes: sizesArray,
-      coverPhoto: imageUrl,
-    });
-    await newCar.save();
-    req.flash("succes_msg", "New Product Added Successfully !");
-    res.redirect("/admin");
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Upload failed: " + error.message });
-  }
 });
 
 router.get("/getUniqueMadeFor", async (req, res) => {
