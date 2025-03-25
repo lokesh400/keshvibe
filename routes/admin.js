@@ -290,4 +290,10 @@ router.post("/add-product", upload.single("file"), async (req, res) => {
   }
 });
 
+//specific order
+router.get("/admin/view/this/product:id", async (req, res) => {
+  
+  res.render("admin/addProduct.ejs"); // Renders views/index.ejs
+});
+
 module.exports = router;
