@@ -38,28 +38,28 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 
 const store = MongoStore.create({
-  mongoUrl: process.env.mongo_url,
-  crypto: {
-      secret: process.env.secret,
+  mongoUrl:process.env.mongo_url,
+  crypto:{
+    secret: process.env.secret,
   },
-  touchAfter: 24 * 3600, // Time period in seconds
-});
+  touchAfter: 24*3600
+})
 
-store.on("error", (error) => {
-  console.error("Error in connecting Mongo session store:", error);
-});
+store.on("error", ()=>{
+  console.log("error in connecting mongo session store",error)
+})
 
 const sessionOptions = {
   store,
   secret: process.env.secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days in milliseconds
-      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-  },
-};
+  resave:false,
+  saveUninitialized:true,
+  cookie:{
+    expires: Date.now() + 3*24*60*60*1000,
+    maxAge: 3*24*60*60*1000,
+    httpOnly: true,
+  }
+}
 
 const Upload = {
   uploadFile: async (filePath) => {
