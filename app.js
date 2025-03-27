@@ -38,28 +38,28 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 
 const store = MongoStore.create({
-  mongoUrl:process.env.mongo_url,
-  crypto:{
-    secret: process.env.secret,
+  mongoUrl: process.env.mongo_url,
+  crypto: {
+      secret: process.env.secret,
   },
-  touchAfter: 24*3600
-})
+  touchAfter: 24 * 3600, // Time period in seconds
+});
 
-store.on("error", ()=>{
-  console.log("error in connecting mongo session store",error)
-})
+store.on("error", (error) => {
+  console.error("Error in connecting Mongo session store:", error);
+});
 
 const sessionOptions = {
   store,
   secret: process.env.secret,
-  resave:false,
-  saveUninitialized:true,
-  cookie:{
-    expires: Date.now() + 3*24*60*60*1000,
-    maxAge: 3*24*60*60*1000,
-    httpOnly: true,
-  }
-}
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
+      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days in milliseconds
+      httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+  },
+};
 
 const Upload = {
   uploadFile: async (filePath) => {
@@ -90,19 +90,7 @@ app.use((req, res, next) => {
     next();
 });
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/user/login')
-}
-
-function isAdmin(req, res, next) {
-  if (req.isAuthenticated() && req.user.role === 'admin') {
-    return next();
-  }
-  res.render("./error/accessdenied.ejs");
-}
+const {isLoggedIn,saveRedirectUrl,isAdmin,ensureAuthenticated} = require('./middlewares/login.js');
 
 const Product = require('./models/Product.js')
 const userrouter = require("./routes/user.js");
@@ -123,34 +111,21 @@ app.use("/",cartrouter);
 app.use("/",adminrouter);
 app.use("/",reviewrouter);
 
-app.get("/", async (req,res)=>{
+app.get("/",isLoggedIn, async (req,res)=>{
     const products = await Product.find().limit(12);
     res.render("index.ejs", { products });
 })
 
-// app.get("/load-more-products", async (req, res) => {
-//   let page = parseInt(req.query.page) || 1; // Get the page number from the request
-//   let limit = 10; // Load 10 products per request
-//   let skip = (page - 1) * limit;
-
-//   const products = await Product.find().skip(skip).limit(limit);
-  
-//   res.json(products);
-// });
-
-
-app.get("/aboutus", (req,res)=>{
+app.get("/aboutus",isLoggedIn, (req,res)=>{
   res.render('aboutUs.ejs');
 })
 
-app.get("/services", (req,res)=>{
+app.get("/services",isLoggedIn, (req,res)=>{
   res.render('services.ejs');
 })
 
-
-
 // Route to render the Add Address Page
-app.get("/add-address", (req, res) => {
+app.get("/add-address",isLoggedIn, (req, res) => {
   res.render("add-address", { 
       currUser: req.user,  // Pass the logged-in user
       isEdit: false  // Explicitly set isEdit to false
@@ -158,7 +133,23 @@ app.get("/add-address", (req, res) => {
 });
 
 // Handle Address Submission
-app.post('/add-address', async (req, res) => {
+// app.post('/add-address',isLoggedIn,saveRedirectUrl, async (req, res) => {
+//   const { street, city, state, pincode, mobile } = req.body;
+//   console.log(req.body);
+//   try {
+//       await User.findByIdAndUpdate(req.user._id, {
+//           address: { street, city, state, pincode },
+//           mobile
+//       });
+//       res.redirect(res.locals.RedirectUrl || "/");
+//   } catch (err) {
+//       console.error(err);
+//       res.redirect('/add-address');
+//   }
+// });
+
+app.post('/add-address', isLoggedIn, saveRedirectUrl, async (req, res) => {
+  console.log('Redirect URL from locals:', res.locals.RedirectUrl);
   const { street, city, state, pincode, mobile } = req.body;
   console.log(req.body);
   try {
@@ -166,15 +157,20 @@ app.post('/add-address', async (req, res) => {
           address: { street, city, state, pincode },
           mobile
       });
-      res.redirect(`/cart/${req.user._id}`);
+
+      // Redirect to the saved URL or the home page
+      const redirectUrl = res.locals.RedirectUrl || "/";
+      console.log('Redirecting to:', redirectUrl);
+      res.redirect(redirectUrl);
   } catch (err) {
-      console.error(err);
+      console.error('Error while adding address:', err);
       res.redirect('/add-address');
   }
 });
 
+
 // Route to render the Edit Address Page
-app.get("/edit-address", (req, res) => {
+app.get("/edit-address",isLoggedIn, (req, res) => {
   if (!req.user.address) {
       return res.redirect("/add-address");
   }
@@ -185,7 +181,7 @@ app.get("/edit-address", (req, res) => {
 });
 
 // Handle Address Update
-app.post('/edit-address', async (req, res) => {
+app.post('/edit-address',isLoggedIn, async (req, res) => {
   const { street, city, state, pincode, mobile } = req.body;
   try {
       await User.findByIdAndUpdate(req.user._id, {

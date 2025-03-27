@@ -10,9 +10,9 @@ const cartSchema = new mongoose.Schema({
       quantity: { type: Number, required: true, min: 1 },
     },
   ],
-  subTotal: { type: Number, default: 0 }, // Default to 0
-  deliveryCharges: { type: Number, default: 80 },
-  totalAmount: { type: Number, default: 0 }, // Default to 0
+  subTotal: { type: Number}, // Default to 0
+  deliveryCharges: { type: Number},
+  totalAmount: { type: Number }, // Default to 0
 });
 
 cartSchema.pre("save", function (next) {

@@ -88,14 +88,25 @@ router.get("/my/orders", async (req, res) => {
         const orders = await Order.find({ user: userId })
             .populate("products.product") // Populate product details
             .sort({ createdAt: -1 });
-
-            console.log(orders.products)
-
         res.render("myOrders.ejs", { orders });
     } catch (error) {
         console.error("Error fetching orders:", error);
         res.render("my-orders", { orders: [] });
     }
+});
+
+router.get("/get/receipt/:id", async (req, res) => {
+  try {
+      const userId = req.user._id; // Assuming authentication is implemented
+      const orderId = req.params.id;
+      const order = await Order.findById(orderId)
+          .populate("products.product") // Populate product details
+          .sort({ createdAt: -1 });    
+      res.render("productReceipt.ejs", { order });
+  } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.render("my-orders", { orders: [] });
+  }
 });
 
  

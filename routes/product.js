@@ -46,9 +46,6 @@ const Upload = {
 };
 
 // // // show all products
-// router.get("/all/products", async (req, res) => {
-//   res.render('allProducts.ejs')
-// });
 router.get("/all/products", async (req, res) => {
   try {
     let { sort, category, madeFor } = req.query;
@@ -69,48 +66,48 @@ router.get("/all/products", async (req, res) => {
   }
 });
 
-router.get("/products", async (req, res) => {
-    try {
-        let { page = 1, limit = 10, sort = "asc", madeFor, category, sortBy } = req.query;
-        page = parseInt(page);
-        limit = parseInt(limit);
-        let filter = {};
-        if (madeFor) filter.madeFor = madeFor; // Filter by gender
-        if (category) filter.category = category; // Filter by category (T-shirts, Hoodies, etc.)
-        let sortOption = {}; // Sorting logic
-        if (sortBy === "price") {
-            sortOption.price = sort === "asc" ? 1 : -1;
-        } else if (sortBy === "newest") {
-            sortOption.createdAt = -1;
-        }
-        // Fetch products
-        let products = await Product.find(filter)
-            .sort(sortOption)
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .lean();
-        // Fetch reviews for popularity sorting
-        if (sortBy === "popularity") {
-            const productIds = products.map((product) => product._id);
-            const reviews = await Review.aggregate([
-                { $match: { productId: { $in: productIds } } },
-                { $group: { _id: "$productId", avgRating: { $avg: "$rating" } } }
-            ]);
-            const reviewMap = {};
-            reviews.forEach((r) => {
-                reviewMap[r._id] = r.avgRating || 0;
-            });
-            products.forEach((p) => {
-                p.avgRating = reviewMap[p._id] || 0;
-            });
-            products.sort((a, b) => b.avgRating - a.avgRating); // Sort by highest rating
-        }
-        res.json(products);
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        res.status(500).json({ message: "Failed to load products" });
-    }
-});
+// router.get("/products", async (req, res) => {
+//     try {
+//         let { page = 1, limit = 10, sort = "asc", madeFor, category, sortBy } = req.query;
+//         page = parseInt(page);
+//         limit = parseInt(limit);
+//         let filter = {};
+//         if (madeFor) filter.madeFor = madeFor; // Filter by gender
+//         if (category) filter.category = category; // Filter by category (T-shirts, Hoodies, etc.)
+//         let sortOption = {}; // Sorting logic
+//         if (sortBy === "price") {
+//             sortOption.price = sort === "asc" ? 1 : -1;
+//         } else if (sortBy === "newest") {
+//             sortOption.createdAt = -1;
+//         }
+//         // Fetch products
+//         let products = await Product.find(filter)
+//             .sort(sortOption)
+//             .skip((page - 1) * limit)
+//             .limit(limit)
+//             .lean();
+//         // Fetch reviews for popularity sorting
+//         if (sortBy === "popularity") {
+//             const productIds = products.map((product) => product._id);
+//             const reviews = await Review.aggregate([
+//                 { $match: { productId: { $in: productIds } } },
+//                 { $group: { _id: "$productId", avgRating: { $avg: "$rating" } } }
+//             ]);
+//             const reviewMap = {};
+//             reviews.forEach((r) => {
+//                 reviewMap[r._id] = r.avgRating || 0;
+//             });
+//             products.forEach((p) => {
+//                 p.avgRating = reviewMap[p._id] || 0;
+//             });
+//             products.sort((a, b) => b.avgRating - a.avgRating); // Sort by highest rating
+//         }
+//         res.json(products);
+//     } catch (error) {
+//         console.error("Error fetching products:", error);
+//         res.status(500).json({ message: "Failed to load products" });
+//     }
+// });
 
 //to filter categories
 router.get('/api/category/products' ,async (req,res)=>{
@@ -121,7 +118,6 @@ router.get('/api/category/products' ,async (req,res)=>{
     res.send("internal system error")
   }
 })
-
 
 //search products
 router.get("/search/products", async (req, res) => {

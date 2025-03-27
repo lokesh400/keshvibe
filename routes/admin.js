@@ -1,8 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 const User = require("../models/User");
 const router = express.Router();
+
+const CryptoJS = require("crypto-js");
+const QR_SECRET = "my_super_secret_key"; // Use a strong, secure key
+
+// Encrypt the order ID
+function encryptOrderId(orderId) {
+  return CryptoJS.AES.encrypt(orderId, QR_SECRET).toString();
+}
+
+// Decrypt the order ID
+function decryptOrderId(encryptedOrderId) {
+  const bytes = CryptoJS.AES.decrypt(encryptedOrderId, QR_SECRET);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
 const {
   isLoggedIn,
   saveRedirectUrl,
@@ -53,7 +69,7 @@ const Upload = {
 };
 
 
-router.get("/admin", async (req, res) => {
+router.get("/admin",isLoggedIn,isAdmin, async (req, res) => {
   const orders = await Order.find()
     .populate("user", "name email")
     .populate("products.product")
@@ -103,17 +119,40 @@ router.get("/admin", async (req, res) => {
   });
 });
 
-// ✅ Render Admin Orders Page
+
+
+// Fetch all orders and send encrypted QR codes
 router.get("/admin/orders", async (req, res) => {
   try {
-    const orders = await Order.find()
-      .populate("user", "name email")
-      .populate("products.product")
-      .sort({ createdAt: -1 });
-    res.render("admin/admin-orders", { orders });
+    const orders = await Order.find().populate("user");
+    const encryptedOrders = orders.map((order) => ({
+      ...order.toObject(),
+      encryptedId: encryptOrderId(order._id.toString()),
+    }));
+    res.render("admin/admin-orders", { orders: encryptedOrders });
   } catch (error) {
     console.error("Error fetching orders:", error);
-    res.render("admin-orders", { orders: [] });
+    res.status(500).send("Error fetching orders.");
+  }
+});
+
+// Update status of orders to 'printed'
+router.post("/admin/print/orders/mark-printed", async (req, res) => {
+  try {
+    const { orderIds } = req.body;
+    if (!orderIds || orderIds.length === 0) {
+      return res.status(400).json({ success: false, message: "No order IDs provided." });
+    }
+
+    await Order.updateMany(
+      { _id: { $in: orderIds } },
+      { $set: { status: "printed" } }
+    );
+
+    res.json({ success: true, message: "Orders marked as printed." });
+  } catch (error) {
+    console.error("Error updating orders:", error);
+    res.status(500).json({ success: false, message: "Failed to update orders." });
   }
 });
 
@@ -149,29 +188,27 @@ router.get("/order/details/:orderId", isLoggedIn, isAdmin, async (req, res) => {
   }
 });
 
-router.post("/admin/print/orders/mark-printed", async (req, res) => {
+// Fetch and decrypt order details
+router.get("/order/details/:encryptedId", async (req, res) => {
   try {
-    const { orderIds } = req.body; // Get the order IDs from the request body
-    if (!orderIds || orderIds.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No order IDs provided." });
+    const { encryptedId } = req.params;
+    const decryptedOrderId = decryptOrderId(encryptedId);
+    const order = await Order.findById(decryptedOrderId);
+    if (!order) {
+      return res.status(404).send("Order not found.");
     }
-
-    // Update the status of the orders to 'printed' (or any desired status)
-    await Order.updateMany(
-      { _id: { $in: orderIds } }, // Match orders with these IDs
-      { $set: { status: "printed" } } // Update their status
-    );
-
-    res.json({ success: true, message: "Orders marked as printed." });
+    res.render("order-details", { order });
   } catch (error) {
-    console.error("Error updating orders:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to update orders." });
+    console.error("Error fetching order:", error);
+    res.status(500).send("Error retrieving order details.");
   }
 });
+
+// Render the QR scanner page
+router.get("/admin/scan/order", (req, res) => {
+  res.render("admin/scan-qr.ejs");
+});
+
 
 router.get("/admin/orders/count", async (req, res) => {
   try {
@@ -200,7 +237,8 @@ router.post("/order-details/:orderId", async (req, res) => {
 //admin to show all costumers
 router.get("/admin/all/costumers", async (req, res) => {
   try {
-    const costumers = await User.find({ role: "costumer" });
+    const costumers = await User.find({ role: "customer" });
+    console.log(costumers);
     res.render("admin/allCostumers.ejs", { customers: costumers });
   } catch (error) {
     console.error("Error fetching order counts:", error);
@@ -238,15 +276,110 @@ router.get("/admin/all/todays/orders", async (req, res) => {
 });
 
 //admin product
-// Edit a product
-router.post("/admin/edit/:id", async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id, {
-    name: req.body.name,
-    price: req.body.price,
-    category: req.body.category,
-  });
-  res.redirect("/product/management");
+// // Edit a product
+router.get("/admin/update/product/:id", async (req, res) => {
+  const {id} = req.params; 
+  const product = await Product.findById(req.params.id);  
+  console.log(id)
+  res.render("admin/thisProduct.ejs",{product,id});
 });
+
+//edit a product
+// Update product details
+router.put("/admin/update/product/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    description,
+    price,
+    madeFor,
+    keywords,
+    category,
+    stock,
+    sizes,
+    coverPhoto,
+    images,
+  } = req.body;
+
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.name = name || product.name;
+    product.description = description || product.description;
+    product.price = price || product.price;
+    product.madeFor = madeFor || product.madeFor;
+    product.keywords = keywords ? keywords.split(",") : product.keywords;
+    product.category = category || product.category;
+    product.stock = stock || product.stock;
+    product.sizes = sizes ? sizes.split(",") : product.sizes;
+    product.coverPhoto = coverPhoto || product.coverPhoto;
+    product.images = images || product.images;
+
+    const updatedProduct = await product.save();
+    res.status(200).json({ message: "Product updated successfully", updatedProduct });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//update images 
+// Upload images to a specific product
+router.get("/upload-images/:id", upload.array("images", 5), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.render('admin/addProductImages.ejs',{id});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+router.patch("/admin/update-image/:id", upload.single("file"), async (req, res) => {
+  try {
+    const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
+    const imageUrl = result.secure_url;
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting local file:", err);
+      } else {
+        console.log("Local file deleted successfully");
+      }
+    });
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+    product.images.push(imageUrl); // Add the new image to the images array
+    await product.save();
+    res.redirect(`/upload-images/${req.params.id}`);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Upload failed: " + error.message });
+  }
+});
+// router.post("/upload-images/:id", upload.array("images", 5), async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const product = await Product.findById(id);
+//     if (!product) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+//     const imagePaths = req.files.map((file) => file.path); // Get uploaded file paths
+//     product.images = [...product.images, ...imagePaths]; // Add images to the existing array
+//     await product.save();
+//     res.status(200).json({
+//       message: "Images uploaded successfully",
+//       images: product.images,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 // Delete a product
 router.post("/admin/delete/:id", async (req, res) => {
@@ -291,9 +424,18 @@ router.post("/add-product", upload.single("file"), async (req, res) => {
 });
 
 //specific order
-router.get("/admin/view/this/product:id", async (req, res) => {
-  
-  res.render("admin/addProduct.ejs"); // Renders views/index.ejs
+router.get("/admin/view/this/product/:id", async (req, res) => {
+    try {
+        const userId = req.user._id; // Assuming authentication is implemented
+        const order = await Order.findById(req.params.id)
+            .populate("products.product") // Populate product details
+            .sort({ createdAt: -1 });
+            // console.log(orders.products)
+            const orders = [order]
+        res.render("admin/thisOrder.ejs", { orders });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.render("my-orders", { orders: [] });
+    }
 });
-
 module.exports = router;

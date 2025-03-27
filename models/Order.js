@@ -9,8 +9,15 @@ const OrderSchema = new mongoose.Schema({
       price: { type: Number, required: true }
     }
   ],
-  deliveryCharges: {type:Number, default:80},
-  totalAmount: { type: Number, required: true },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    pincode: String,
+  },
+  subTotal: { type: Number },
+  deliveryCharges: { type: Number },
+  totalAmount: { type: Number },
   status: { type: String, enum: ["pending", "packed", "shipped", "delivered","printed"], default: "pending" },
   paymentStatus: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
   createdAt: { type: Date, default: Date.now }

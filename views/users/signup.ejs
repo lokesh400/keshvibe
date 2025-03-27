@@ -1,80 +1,79 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="/styles/signup.css">
-    <link rel="stylesheet" href="/styles/flash.css">
-    <link href="/styles/loader.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Progressive Registration Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="/js/loader.js"></script>
-    <link rel="stylesheet" href="/styles/signup.css">
 </head>
-<body>
 
-    <% if (error_msg && error_msg.length > 0) { %>
-        <div id="successToast">
-            <div class="info__icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none">
-                    <path fill="#393a37" d="m12 1.5c-5.79844 0-10.5 4.70156-10.5 10.5 0 5.7984 4.70156 10.5 10.5 10.5 5.7984 0 10.5-4.7016 10.5-10.5 0-5.79844-4.7016-10.5-10.5-10.5zm.75 15.5625c0 .1031-.0844.1875-.1875.1875h-1.125c-.1031 0-.1875-.0844-.1875-.1875v-6.375c0-.1031.0844-.1875.1875-.1875h1.125c.1031 0 .1875.0844.1875.1875zm-.75-8.0625c-.2944-.00601-.5747-.12718-.7808-.3375-.206-.21032-.3215-.49305-.3215-.7875s.1155-.57718.3215-.7875c.2061-.21032.4864-.33149.7808-.3375.2944.00601.5747.12718.7808.3375.206.21032.3215.49305.3215.7875s-.1155.57718-.3215.7875c-.2061.21032-.4864.33149-.7808.3375z"></path>
-                </svg>
-            </div>
-            <div class="info__title"> <%= error_msg %></div>
-        </div>
-    <% } %>
-
-    <div id="form-main-div">
+<body class="font-roboto min-h-screen flex items-center justify-center">
+    <div id="form-main-div" class="bg-white shadow-md rounded-lg p-8 w-full max-w-md transition-all duration-500">
         <form id="form" action="/user/signup" method="POST">
-            <p class="title">Register</p>
-            <p class="message">Signup now and get full access to our content.</p>
+            <h1 class="text-2xl font-bold text-gray-800 mb-4">Register</h1>
+            <p class="text-gray-600 mb-6">Signup now and get full access to our content.</p>
 
-            <div id="email-blk">
-                <label> Email </label>
-                <input required placeholder="" type="email" class="input" name="email" id="email">
+            <!-- Step 1: Email -->
+            <div id="email-step" class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input required type="email" name="email" id="email" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your email">
+                <button type="button" id="send-otp" class="w-full bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">Send OTP</button>
             </div>
 
-            <div id="otp-field" style="display: none;">
-                    <label>Enter Email OTP </label>
-                    <input required placeholder="" type="text" class="input" name="otp" id="otp">
+            <!-- Step 2: OTP -->
+            <div id="otp-step" class="mb-4 hidden opacity-0">
+                <label for="otp" class="block text-sm font-medium text-gray-700">Enter Email OTP</label>
+                <input required type="text" name="otp" id="otp" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter OTP">
+                <button type="button" id="verify-otp" class="w-full bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">Verify OTP</button>
             </div>
 
-            <button type="button" class="send-otp" id="send-otp">Send OTP</button>
+            <!-- Step 3: Name -->
+            <div id="name-step" class="mb-4 hidden opacity-0">
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input required type="text" name="name" id="name" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your name">
+                <button type="button" id="next-name" class="w-full bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">Next</button>
+            </div>
 
-            <label> Name </label>
-                <input required placeholder="" type="text" class="input" name="name">
-            
-            <label> Password </label>    
-                <input required placeholder="" type="password" class="input" name="password">
-            
-            <label>Conform Password </label>
-                <input required placeholder="" type="password" class="input" name="confirmpassword">
-            
-                <div id="phone-blk">
-                    <label> Mobile Number </label>
-                    <input required placeholder="" type="Number" class="input" name="contactNumber" id="email">
-                </div>
-           
-            
-            <button type="submit" class="submit" style="display: none;" id="submit-button">Submit</button>
-            
-            <p class="signin">Already have an account? <a href="/user/login">Signin</a></p>
+            <!-- Step 4: Password -->
+            <div id="password-step" class="mb-4 hidden opacity-0">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input required type="password" name="password" id="password" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password">
+                <label for="confirmpassword" class="block text-sm font-medium text-gray-700 mt-4">Confirm Password</label>
+                <input required type="password" name="confirmpassword" id="confirmpassword" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Confirm your password">
+                <button type="submit" id="submit" class="w-full bg-green-600 text-white py-2 rounded-md mt-4 hover:bg-green-700 focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">Submit</button>
+            </div>
         </form>
     </div>
 
     <script>
-        document.getElementById('send-otp').addEventListener('click', async function() {
+        const steps = [
+            { id: "email-step", nextBtnId: "send-otp", nextStepId: "otp-step" },
+            { id: "otp-step", nextBtnId: "verify-otp", nextStepId: "name-step" },
+            { id: "name-step", nextBtnId: "next-name", nextStepId: "password-step" },
+        ];
+
+        function showNextStep(currentStep, nextStep) {
+            const currentDiv = document.getElementById(currentStep);
+            const nextDiv = document.getElementById(nextStep);
+
+            gsap.to(currentDiv, { opacity: 0, duration: 0.5, onComplete: () => {
+                currentDiv.classList.add("hidden");
+                nextDiv.classList.remove("hidden");
+                gsap.to(nextDiv, { opacity: 1, duration: 0.5 });
+            }});
+        }
+
+        // OTP Sending Functionality
+        document.getElementById('send-otp').addEventListener('click', async function () {
             const email = document.getElementById('email').value;
             if (!email) {
                 alert('Please enter your email address.');
                 return;
             }
-            
             try {
-                document.getElementById('send-otp').style.display = 'none';
-                document.getElementById('email-blk').style.display = 'none';
-                document.getElementById('phone-blk').style.display = 'block';
-                document.getElementById('otp-field').style.display = 'block';
                 const response = await fetch('/user/new/send-otp', {
                     method: 'POST',
                     headers: {
@@ -82,23 +81,22 @@
                     },
                     body: JSON.stringify({ email }),
                 });
-
                 const result = await response.json();
-                alert(result.message);
-
-                document.getElementById('submit-button').style.display = 'block';
+                alert(result.message || 'OTP sent successfully!');
+                showNextStep("email-step", "otp-step");
             } catch (error) {
                 console.error('Error sending OTP:', error);
                 alert('An error occurred while sending OTP.');
             }
         });
 
-        setTimeout(() => {
-            const successToast = document.getElementById('successToast');
-            if (successToast) {
-                successToast.style.display = 'none';
-            }
-        }, 3000);
+        steps.forEach(step => {
+            const nextBtn = document.getElementById(step.nextBtnId);
+            nextBtn.addEventListener("click", () => {
+                showNextStep(step.id, step.nextStepId);
+            });
+        });
     </script>
 </body>
+
 </html>

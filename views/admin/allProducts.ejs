@@ -69,7 +69,9 @@
                             <td class="p-2"><%= product.category %></td>
                             <td class="p-2"><%= product.stock ? "In Stock" : "Out of Stock" %></td>
                             <td class="p-2">
-                                <button onclick="editProduct('<%= product._id %>', '<%= product.name %>', <%= product.price %>, '<%= product.category %>', '<%= product.stock %>')" class="bg-green-500 text-white px-3 py-1 rounded">Edit</button>
+                                <a href="/admin/update/product/<%= product._id %>">
+                                    <button class="bg-green-500 text-white px-3 py-1 rounded">Edit Product</button>
+                                </a>
                                 <form method="POST" action="/admin/delete/<%= product._id %>" class="inline">
                                     <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
                                 </form>
