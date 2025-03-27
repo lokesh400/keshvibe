@@ -13,14 +13,6 @@ const {
   ensureAuthenticated,
 } = require("../middlewares/login.js");
 
-// const express = require("express");
-// const router = express.Router();
-// const User = require('../models/User');
-// const passport = require("passport");
-// const nodemailer = require('nodemailer');
-// const passportLocalMongoose = require('passport-local-mongoose');
-// const Otp = require('../models/Otp');
-
 // Signup route
 router.get("/signup", (req, res) => {
   req.flash("error_msg", "Hello Dear");
@@ -36,9 +28,9 @@ router.post("/signup", async (req, res) => {
   if (password == confirmpassword && otp == user.otp) {
     const newUser = new User({ name, role, email, username, contactNumber });
     try {
-      // Attempt to register the new user
       const registeredUser = await User.register(newUser, password);
-      //sendimg greeting mail
+      const newSubscriber = new NewsLetter({ email });
+      await newSubscriber.save();
 
       const transporter = nodemailer.createTransport({
         service: "gmail",

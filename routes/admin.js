@@ -362,24 +362,6 @@ router.patch("/admin/update-image/:id", upload.single("file"), async (req, res) 
     res.status(500).json({ message: "Upload failed: " + error.message });
   }
 });
-// router.post("/upload-images/:id", upload.array("images", 5), async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const product = await Product.findById(id);
-//     if (!product) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-//     const imagePaths = req.files.map((file) => file.path); // Get uploaded file paths
-//     product.images = [...product.images, ...imagePaths]; // Add images to the existing array
-//     await product.save();
-//     res.status(200).json({
-//       message: "Images uploaded successfully",
-//       images: product.images,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
 
 // Delete a product
 router.post("/admin/delete/:id", async (req, res) => {
