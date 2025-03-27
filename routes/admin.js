@@ -74,7 +74,6 @@ router.get("/admin",isLoggedIn,isAdmin, async (req, res) => {
     .populate("user", "name email")
     .populate("products.product")
     .sort({ createdAt: -1 });
-
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
   const endOfDay = new Date();
@@ -122,7 +121,7 @@ router.get("/admin",isLoggedIn,isAdmin, async (req, res) => {
 
 
 // Fetch all orders and send encrypted QR codes
-router.get("/admin/orders", async (req, res) => {
+router.get("/admin/orders",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const orders = await Order.find().populate("user");
     const encryptedOrders = orders.map((order) => ({
@@ -137,7 +136,7 @@ router.get("/admin/orders", async (req, res) => {
 });
 
 // Update status of orders to 'printed'
-router.post("/admin/print/orders/mark-printed", async (req, res) => {
+router.post("/admin/print/orders/mark-printed",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const { orderIds } = req.body;
     if (!orderIds || orderIds.length === 0) {
@@ -156,7 +155,7 @@ router.post("/admin/print/orders/mark-printed", async (req, res) => {
   }
 });
 
-router.post("/admin/orders/update-status/:id", async (req, res) => {
+router.post("/admin/orders/update-status/:id",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const { status } = req.body;
     const orderId = req.params.id;
@@ -189,7 +188,7 @@ router.get("/order/details/:orderId", isLoggedIn, isAdmin, async (req, res) => {
 });
 
 // Fetch and decrypt order details
-router.get("/order/details/:encryptedId", async (req, res) => {
+router.get("/order/details/:encryptedId",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const { encryptedId } = req.params;
     const decryptedOrderId = decryptOrderId(encryptedId);
