@@ -198,11 +198,16 @@ router.post("/signup", async (req, res) => {
 
 // Login route
 router.get("/login", (req, res) => {
-  if (req.user) {
-    res.redirect("/all/cars");
+  if ( req.user && req.user.role==='admin') {
+    res.redirect("/admin");
   }
-  req.flash("error_msg", "Welcome back");
+  else if( req.user && req.user.role==='customer'){
+    res.redirect("/");
+  }
+  else{
+    req.flash("error_msg", "Welcome back");
   res.render("./users/login.ejs");
+  }
 });
 
 router.post("/login", saveRedirectUrl, (req, res, next) => {

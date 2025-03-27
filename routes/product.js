@@ -9,6 +9,13 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const { error } = require("console");
 
+const {
+  isLoggedIn,
+  saveRedirectUrl,
+  isAdmin,
+  ensureAuthenticated,
+} = require("../middlewares/login.js");
+
 cloudinary.config({
   cloud_name: process.env.cloud_name,
   api_key: process.env.api_key,
@@ -46,7 +53,7 @@ const Upload = {
 };
 
 // // // show all products
-router.get("/all/products", async (req, res) => {
+router.get("/all/products",isLoggedIn, async (req, res) => {
   try {
     let { sort, category, madeFor } = req.query;
     let filter = {};
@@ -110,7 +117,7 @@ router.get("/all/products", async (req, res) => {
 // });
 
 //to filter categories
-router.get('/api/category/products' ,async (req,res)=>{
+router.get('/api/category/products', isLoggedIn,async (req,res)=>{
   try{
     const products = await Product.find()
     res.json(products)
@@ -120,7 +127,7 @@ router.get('/api/category/products' ,async (req,res)=>{
 })
 
 //search products
-router.get("/search/products", async (req, res) => {
+router.get("/search/products",isLoggedIn, async (req, res) => {
   try {
     const query = req.query.query; // Get search term from URL
     if (!query || query.trim() === "") {
@@ -143,12 +150,12 @@ router.get("/search/products", async (req, res) => {
 
 
 //searcherror
-router.get("/search-error", (req,res)=>{
+router.get("/search-error",isLoggedIn, (req,res)=>{
   res.render("searchError.ejs");
 })
 
 //by madefor
-router.get("/madefor/category/products", async (req, res) => {
+router.get("/madefor/category/products",isLoggedIn, async (req, res) => {
   try {
     const Query = req.query.query || ""; // Ensure it's at least an empty string
     const query = Query.toLowerCase(); // Convert to lowercase
@@ -168,27 +175,27 @@ router.get("/madefor/category/products", async (req, res) => {
 });
 
 //sho[ by category 
-router.get('/madefor/category/products/category/:men', async (req,res)=>{
+router.get('/madefor/category/products/category/:men',isLoggedIn, async (req,res)=>{
   const products = await Product.find({madeFor:"Men"});
   res.render("search", { products });
 })
 
-router.get('/madefor/category/products/category/:women', async (req,res)=>{
+router.get('/madefor/category/products/category/:women',isLoggedIn, async (req,res)=>{
   const products = await Product.find({madeFor:"women"});
   res.render("search", { products });
 })
 
-router.get('/madefor/category/products/category/this/:kids', async (req,res)=>{
+router.get('/madefor/category/products/category/this/:kids',isLoggedIn, async (req,res)=>{
   res.render("error/comingSoon.ejs")
 })
 
 //all products
-router.get("/product/management", async (req, res) => {
+router.get("/product/management",isLoggedIn, async (req, res) => {
   const products = await Product.find();
   res.render("admin/allProducts.ejs", { products });
 });
 
-router.get("/getUniqueMadeFor", async (req, res) => {
+router.get("/getUniqueMadeFor",isLoggedIn, async (req, res) => {
     try {
         const uniqueMadeFor = await Product.distinct("madeFor");
         res.json(uniqueMadeFor);
@@ -198,7 +205,7 @@ router.get("/getUniqueMadeFor", async (req, res) => {
 });
 
 //related products 
-router.get("/related/:productId", async (req, res) => {
+router.get("/related/:productId",isLoggedIn, async (req, res) => {
   try {
       const productId = req.params.productId;
 

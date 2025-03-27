@@ -6,6 +6,13 @@ require('dotenv').config();
 
 const Otp = require('../models/Otp');
 
+const {
+    isLoggedIn,
+    saveRedirectUrl,
+    isAdmin,
+    ensureAuthenticated,
+  } = require("../middlewares/login.js");
+
 
 router.post('/new/send-otp', async (req, res) => {
     const { email } = req.body;

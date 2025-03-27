@@ -61,7 +61,7 @@ router.get("/cart/:userId", isLoggedIn, async (req, res) => {
   });
 
 
-router.get("/this/product/:id", async (req, res) => {
+router.get("/this/product/:id", isLoggedIn, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     const reviews = await Review.find({ product: req.params.id })
@@ -102,7 +102,7 @@ router.get("/this/product/:id", async (req, res) => {
 });
 
 // Add to Cart Route
-router.post("/add-to-cart", async (req, res) => {
+router.post("/add-to-cart", isLoggedIn, async (req, res) => {
   try {
     const { userId, productId, quantity, size } = req.body;
     if (!userId || !productId || !quantity || !size) {
@@ -142,7 +142,7 @@ router.post("/add-to-cart", async (req, res) => {
 });
 
 //edit cart
-router.post("/update-quantity", async (req, res) => {
+router.post("/update-quantity", isLoggedIn, async (req, res) => {
   try {
     const { userId, productId, change } = req.body;
     if (!userId || !productId || change === undefined) {
@@ -168,7 +168,7 @@ router.post("/update-quantity", async (req, res) => {
 });
 
 // 🗑 Remove item from cart
-router.delete("/delete/this/product", async (req, res) => {
+router.delete("/delete/this/product", isLoggedIn, async (req, res) => {
   const userId = req.user;
   try {
     const cart = await Cart.findOne({ user: userId });
@@ -185,7 +185,7 @@ router.delete("/delete/this/product", async (req, res) => {
 });
 
 // 🔥 Create Razorpay Order
-router.post("/cart/create-order", async (req, res) => {
+router.post("/cart/create-order", isLoggedIn, async (req, res) => {
   const { userId } = req.body;
   try {
     const cart = await Cart.findOne({ user: userId }).populate("items.product");
@@ -209,7 +209,7 @@ router.post("/cart/create-order", async (req, res) => {
   }
 });
 
-router.post("/cart/verify-payment", async (req, res) => {
+router.post("/cart/verify-payment", isLoggedIn, async (req, res) => {
   try {
     const {
       razorpay_order_id,
@@ -266,14 +266,14 @@ router.post("/cart/verify-payment", async (req, res) => {
   }
 });
 
-router.get("/my/order-success", (req, res) => {
+router.get("/my/order-success", isLoggedIn, (req, res) => {
   res.render("orderPlaced.ejs");
 });
 
 
 
 //get delivery charges
-router.get("/get/delivery/charges", async (req, res) => {
+router.get("/get/delivery/charges", isLoggedIn, async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
@@ -286,7 +286,7 @@ router.get("/get/delivery/charges", async (req, res) => {
 });
 
 //update delivery charges of cart
-router.get("/update/cart", async (req, res) => {
+router.get("/update/cart", isLoggedIn, async (req, res) => {
   const userId = req.user._id;
   try {
     const updatedCart = await Cart.findOneAndUpdate(

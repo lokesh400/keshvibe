@@ -63,6 +63,7 @@
               </td>
               <td class="px-6 py-4 text-sm" id="qr-<%= order._id %>"></td>
             </tr>
+            
             <% }); %>
           </tbody>
         </table>
@@ -89,13 +90,76 @@
       let printWindow = window.open("", "_blank");
       printWindow.document.write("<h1>Pending Orders</h1>");
       pendingOrders.forEach(order => {
-        printWindow.document.write(`<p>Order ID: ${order._id}</p>`);
+        printWindow.document.write(`
+        <div style="width: 90% ; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; font-family: Arial, sans-serif; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+          <h1 style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 10px;">Order Receipt</h1>
+          <p style="text-align: center; font-size: 12px; color: #555;">Thank you for your purchase!</p>
+          <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+          <div style="margin-bottom: 10px;">
+            <p style="font-size: 14px; margin: 0;">Order ID: <strong>${order._id}</strong></p>
+            <p style="font-size: 12px; color: #555; margin: 0;">Date: ${new Date(order.createdAt).toLocaleDateString()}</p>
+          </div>
+          <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+          <div style="display:flex; gap:50px" >
+          <div style="margin-bottom: 10px;">
+            <p style="font-size: 14px; margin: 0; font-weight: bold;">Customer Information</p>
+            <p style="font-size: 12px; margin: 0;">${order.user.name}</p>
+            <p style="font-size: 12px; margin: 0;">${order.user.email}</p>
+            <p style="font-size: 12px; margin: 0;">${order.user.mobile}</p>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <p style="font-size: 14px; margin: 0; font-weight: bold;">Shipping Address</p>
+            <p style="font-size: 12px; margin: 0;">${order.address.street}</p>
+            <p style="font-size: 12px; margin: 0;">${order.address.city}, ${order.address.state} - ${order.address.pincode}</p>
+          </div>
+          </div>
+          <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+          <div style="margin-bottom: 10px;">
+            <p style="font-size: 14px; margin: 0; font-weight: bold;">Order Summary</p>
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 5px;">
+              <thead>
+                <tr>
+                  <th style="text-align: left; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Product</th>
+                  <th style="text-align: right; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Qty</th>
+                  <th style="text-align: right; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Price</th>
+                  <th style="text-align: right; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${order.products
+                  .map(
+                    (item) => `
+                  <tr>
+                    <td style="padding: 5px 0;">${item.name}</td>
+                    <td style="text-align: right; padding: 5px 0;">${item.quantity}</td>
+                    <td style="text-align: right; padding: 5px 0;">₹${item.price}</td>
+                    <td style="text-align: right; padding: 5px 0;">₹${item.quantity * item.price}</td>
+                  </tr>
+                `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+          <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+          <div style="font-size: 12px; margin-bottom: 10px;">
+            <p style="margin: 0;">Subtotal: ₹${order.subTotal}</p>
+            <p style="margin: 0;">Delivery Charges: ₹${order.deliveryCharges}</p>
+            <p style="margin: 0; font-weight: bold;">Total: ₹${order.totalAmount}</p>
+          </div>
+          <div style="text-align: center; margin-top: 10px;">
+            <p style="font-size: 12px;">Scan to View Receipt:</p>
+            <div id="qr-code" style="margin-top: 10px;"></div>
+          </div>
+        </div> 
+        `);
         const qrDiv = document.createElement("div");
         new QRCode(qrDiv, {
           text: `https://keshvibe.in/order/details/${order.encryptedId}`,
           width: 100,
           height: 100
         });
+        qrDiv.style = "margin: auto; display: flex; justify-content: center;";
         printWindow.document.body.appendChild(qrDiv);
       });
 

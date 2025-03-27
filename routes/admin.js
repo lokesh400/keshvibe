@@ -204,12 +204,12 @@ router.get("/order/details/:encryptedId",isLoggedIn,isAdmin, async (req, res) =>
 });
 
 // Render the QR scanner page
-router.get("/admin/scan/order", (req, res) => {
+router.get("/admin/scan/order",isLoggedIn,isAdmin, (req, res) => {
   res.render("admin/scan-qr.ejs");
 });
 
 
-router.get("/admin/orders/count", async (req, res) => {
+router.get("/admin/orders/count",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const pending = await Order.countDocuments({ status: "pending" });
     const packed = await Order.countDocuments({ status: "packed" });
@@ -223,7 +223,7 @@ router.get("/admin/orders/count", async (req, res) => {
   }
 });
 
-router.post("/order-details/:orderId", async (req, res) => {
+router.post("/order-details/:orderId",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const { status } = req.body;
     await Order.findByIdAndUpdate(req.params.orderId, { status });
@@ -234,7 +234,7 @@ router.post("/order-details/:orderId", async (req, res) => {
 });
 
 //admin to show all costumers
-router.get("/admin/all/costumers", async (req, res) => {
+router.get("/admin/all/costumers",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const costumers = await User.find({ role: "customer" });
     console.log(costumers);
@@ -246,7 +246,7 @@ router.get("/admin/all/costumers", async (req, res) => {
 });
 
 //all pending orders
-router.get("/admin/all/pending/orders", async (req, res) => {
+router.get("/admin/all/pending/orders",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const orders = await Order.find({ status: "pending" });
     res.render("admin/pendingOrders.ejs", { orders });
@@ -258,7 +258,7 @@ router.get("/admin/all/pending/orders", async (req, res) => {
 
 //today's orders
 //all pending orders
-router.get("/admin/all/todays/orders", async (req, res) => {
+router.get("/admin/all/todays/orders",isLoggedIn,isAdmin, async (req, res) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -276,7 +276,7 @@ router.get("/admin/all/todays/orders", async (req, res) => {
 
 //admin product
 // // Edit a product
-router.get("/admin/update/product/:id", async (req, res) => {
+router.get("/admin/update/product/:id",isLoggedIn,isAdmin, async (req, res) => {
   const {id} = req.params; 
   const product = await Product.findById(req.params.id);  
   console.log(id)
@@ -285,7 +285,7 @@ router.get("/admin/update/product/:id", async (req, res) => {
 
 //edit a product
 // Update product details
-router.put("/admin/update/product/:id", async (req, res) => {
+router.put("/admin/update/product/:id",isLoggedIn,isAdmin, async (req, res) => {
   const { id } = req.params;
   const {
     name,
@@ -326,7 +326,7 @@ router.put("/admin/update/product/:id", async (req, res) => {
 
 //update images 
 // Upload images to a specific product
-router.get("/upload-images/:id", upload.array("images", 5), async (req, res) => {
+router.get("/upload-images/:id",isLoggedIn,isAdmin, upload.array("images", 5), async (req, res) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
@@ -338,7 +338,7 @@ router.get("/upload-images/:id", upload.array("images", 5), async (req, res) => 
     res.status(500).json({ error: error.message });
   }
 });
-router.patch("/admin/update-image/:id", upload.single("file"), async (req, res) => {
+router.patch("/admin/update-image/:id",isLoggedIn,isAdmin, upload.single("file"), async (req, res) => {
   try {
     const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
     const imageUrl = result.secure_url;
@@ -363,17 +363,17 @@ router.patch("/admin/update-image/:id", upload.single("file"), async (req, res) 
 });
 
 // Delete a product
-router.post("/admin/delete/:id", async (req, res) => {
+router.post("/admin/delete/:id",isLoggedIn,isAdmin, async (req, res) => {
   await Product.findByIdAndDelete(req.params.id);
   res.redirect("/product/management");
 });
 
 // Route to display product form
-router.get("/add/new/product", (req, res) => {
+router.get("/add/new/product",isLoggedIn,isAdmin, (req, res) => {
   res.render("admin/addProduct.ejs"); // Renders views/index.ejs
 });
 
-router.post("/add-product", upload.single("file"), async (req, res) => {
+router.post("/add-product",isLoggedIn,isAdmin, upload.single("file"), async (req, res) => {
   try {
     const { name, price, stock, description, category, sizes } = req.body;
     const sizesArray = sizes ? sizes.split(",").map((size) => size.trim()) : [];
@@ -405,7 +405,7 @@ router.post("/add-product", upload.single("file"), async (req, res) => {
 });
 
 //specific order
-router.get("/admin/view/this/product/:id", async (req, res) => {
+router.get("/admin/view/this/product/:id", isLoggedIn,isAdmin, async (req, res) => {
     try {
         const userId = req.user._id; // Assuming authentication is implemented
         const order = await Order.findById(req.params.id)
