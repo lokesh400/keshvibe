@@ -11,7 +11,7 @@ const {
   } = require("../middlewares/login.js");
 
 //render form
-router.get("/add/review/:id",isLoggedIn, async (req, res) => {
+router.get("/this/product/add/review/:id",isLoggedIn, async (req, res) => {
     try {
         const { id } = req.params;
         const product = await Product.findById(id)

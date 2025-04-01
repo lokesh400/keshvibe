@@ -262,15 +262,21 @@
                             </div>
                             <% }) %>
                                 <% } else { %>
-                                    <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
-                                    <br>
-                                    <a href="add/review/<%= product._id %>">
-                                        <button
-                                            class="!rounded-button w-full bg-custom text-white py-3 px-4 font-medium hover:bg-opacity-90">
-                                            Add Review
-                                        </button>
-                                    </a>
-                                    <% } %>
+                                    <div style="display: block;" >
+                                        <div>
+                                            <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <a href="add/review/<%= product._id %>">
+                                                <button
+                                                    class="!rounded-button bg-custom text-white py-3 px-4 font-medium hover:bg-opacity-90">
+                                                    Add Review
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <% } %>
                 </div>
             </div>
 

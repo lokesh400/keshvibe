@@ -125,8 +125,6 @@
     <main>
         <div class="glide relative overflow-hidden">
             <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    <li class="glide__slide relative">
                         <img src="/images/banner-1.jpg" alt="Summer Collection" />
                         <div class="absolute inset-0 bg-black bg-opacity-40"></div>
                         <div class="absolute inset-0 flex items-center justify-center">
@@ -140,15 +138,6 @@
                                 </a>
                             </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="absolute bottom-4 left-0 right-0" data-glide-el="controls[nav]">
-                <div class="flex justify-center space-x-2">
-                    <button class="w-2 h-2 rounded-full bg-white/50" data-glide-dir="=0"></button>
-                    <button class="w-2 h-2 rounded-full bg-white" data-glide-dir="=1"></button>
-                    <button class="w-2 h-2 rounded-full bg-white/50" data-glide-dir="=2"></button>
-                </div>
             </div>
         </div>
 
@@ -228,7 +217,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="product-list">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1" id="product-list">
                 <% products.forEach(product=> { %>
                     <div class="group product-card">
                         <div
@@ -251,7 +240,7 @@
                                 </h3>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-custom font-medium">Rs <%= product.price %> /-</span>
-                                    <span class="ml-2 text-sm text-gray-500 line-through">Rs <%= 2*product.price %></span>
+                                    <span class="ml-2 text-sm line-through" style="color: red;" >Rs <%= 2*product.price %></span>
                                 </div>
                             </div>
                         </div>
@@ -424,8 +413,6 @@
         form.addEventListener('submit', function (event) {
             // Show the loading spinner
             loadingSpinner.classList.remove('hidden');
-
-            // Disable the subscribe button to prevent multiple submissions
             subscribeButton.disabled = true;
             subscribeButton.textContent = "Submitting...";
         });
