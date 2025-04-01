@@ -375,8 +375,9 @@ router.get("/add/new/product",isLoggedIn,isAdmin, (req, res) => {
 
 router.post("/add-product",isLoggedIn,isAdmin, upload.single("file"), async (req, res) => {
   try {
-    const { name, price, stock, description, category, sizes } = req.body;
+    const { name, price, stock, description, category, sizes, madeFor, keywords } = req.body;
     const sizesArray = sizes ? sizes.split(",").map((size) => size.trim()) : [];
+    const keywordsArray = keywords ? keywords.split(",").map((keyword) => keyword.trim()) : [];
     const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
     const imageUrl = result.secure_url;
     fs.unlink(req.file.path, (err) => {
@@ -386,16 +387,18 @@ router.post("/add-product",isLoggedIn,isAdmin, upload.single("file"), async (req
         console.log("Local file deleted successfully");
       }
     });
-    const newCar = new Product({
+    const newProduct = new Product({
       name,
       price,
       stock,
       description,
       category,
       sizes: sizesArray,
+      madeFor,
+      keywords: keywordsArray,
       coverPhoto: imageUrl,
     });
-    await newCar.save();
+    await newProduct.save();
     req.flash("succes_msg", "New Product Added Successfully !");
     res.redirect("/admin");
   } catch (error) {

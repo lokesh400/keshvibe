@@ -67,16 +67,34 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: Available Sizes -->
+                    <!-- Row 3: Made For & Available Sizes -->
                     <div class="row">
-                        <div class="col-12 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label">Made For</label>
+                            <select name="madeFor" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                                <option value="Kids">Kids</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">Available Sizes</label>
                             <input type="text" name="sizes" class="form-control" placeholder="S, M, L, XL">
                             <small class="text-muted">Separate sizes with commas (e.g., S, M, L, XL)</small>
                         </div>
                     </div>
 
-                    <!-- Row 4: Description -->
+                    <!-- Row 4: Keywords -->
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Keywords</label>
+                            <input type="text" name="keywords" class="form-control" placeholder="e.g., summer, casual, cotton">
+                            <small class="text-muted">Enter keywords separated by commas (e.g., summer, casual, cotton)</small>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Description -->
                     <div class="row">
                         <div class="col-12 mb-3">
                             <label class="form-label">Description</label>
@@ -84,7 +102,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 5: Image Upload -->
+                    <!-- Row 6: Image Upload -->
                     <div class="row">
                         <div class="col-12 mb-3">
                             <label class="form-label">Cover Photo</label>
@@ -92,7 +110,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 6: Image Preview -->
+                    <!-- Row 7: Image Preview -->
                     <div class="row">
                         <div class="col-12 text-center mb-3">
                             <img id="imagePreview" src="https://via.placeholder.com/200" class="img-thumbnail rounded" alt="Image Preview" style="max-width: 200px;">
