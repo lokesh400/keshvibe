@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Store</title>
+    <title>All Products</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
@@ -58,7 +59,7 @@
                      data-date="<%= product.createdAt.getTime() %>">
                     <span class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs rounded">50% OFF</span>
                     <a href="/this/product/<%= product._id %>" >
-                        <img src="<%= product.coverPhoto || 'https://via.placeholder.com/150' %>" class="w-full h-40 object-cover rounded-lg">
+                        <img src="<%= product.coverPhoto || 'https://via.placeholder.com/150' %>" class="w-full h-90 object-cover rounded-lg">
                     </a>
                     
                     <h3 class="text-lg font-semibold mt-2"><%= product.name %></h3>
