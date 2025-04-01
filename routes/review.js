@@ -31,7 +31,6 @@ router.post("/reviews/add/:productId",isLoggedIn, async (req, res) => {
         if (!productId || !rating) {
             return res.status(400).json({ message: "Product ID and rating are required" });
         }
-
         // Check if product exists
         const product = await Product.findById(productId);
         if (!product) {
@@ -48,7 +47,7 @@ router.post("/reviews/add/:productId",isLoggedIn, async (req, res) => {
 
         await newReview.save();
 
-        res.status(201).json({ message: "Review added successfully", review: newReview });
+        res.redirect(`/this/product/${productId}`)
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
