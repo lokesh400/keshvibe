@@ -132,22 +132,6 @@ app.get("/add-address",isLoggedIn, (req, res) => {
   });
 });
 
-// Handle Address Submission
-// app.post('/add-address',isLoggedIn,saveRedirectUrl, async (req, res) => {
-//   const { street, city, state, pincode, mobile } = req.body;
-//   console.log(req.body);
-//   try {
-//       await User.findByIdAndUpdate(req.user._id, {
-//           address: { street, city, state, pincode },
-//           mobile
-//       });
-//       res.redirect(res.locals.RedirectUrl || "/");
-//   } catch (err) {
-//       console.error(err);
-//       res.redirect('/add-address');
-//   }
-// });
-
 app.post('/add-address', isLoggedIn, saveRedirectUrl, async (req, res) => {
   console.log('Redirect URL from locals:', res.locals.RedirectUrl);
   const { street, city, state, pincode, mobile } = req.body;
