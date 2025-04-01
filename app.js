@@ -111,7 +111,7 @@ app.use("/",cartrouter);
 app.use("/",adminrouter);
 app.use("/",reviewrouter);
 
-app.get("/",isLoggedIn, async (req,res)=>{
+app.get("/", async (req,res)=>{
     const products = await Product.find().limit(12);
     res.render("index.ejs", { products });
 })
