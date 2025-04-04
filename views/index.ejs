@@ -20,7 +20,26 @@
     <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
         data-border-radius="medium">
         </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <style>
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .scroll-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #E5E2DD; /* Light grey like in reference */
+            transform: rotate(-3deg); /* Slight rotation like in the image */
+        }
+
+        .scroll-text {
+            display: flex;
+            gap: 30px;
+            animation: scroll 10s linear infinite;
+        }
         /* Hide scrollbar but allow scrolling */
         .px-4.overflow-x-auto {
             -ms-overflow-style: none;
@@ -117,61 +136,33 @@
 
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col space-y-2"></div>
 
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md border-b border-gray-200">
+    <header class="sticky top-0 z-50">
         <%- include('components/navbar.ejs') %>
     </header>
 
-
     <main>
-        <div class="glide relative overflow-hidden">
-            <!-- <div class="glide__track" data-glide-el="track"> -->
-                        <img src="/images/banner-1.jpg" alt="Summer Collection" />
-                        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="text-center text-white">
-                                <h2 class="text-4xl font-bold mb-4">Summer Collection 2024</h2>
-                                <p class="text-xl mb-8">Up to 50% off on selected items</p>
-                                <a href="/all/products">
-                                    <button
-                                        class="!rounded-button bg-custom hover:bg-custom/90 text-white px-8 py-3 text-lg font-medium">Shop
-                                        Now
-                                </button>
-                                </a>
-                            </div>
-                        <!-- </div> -->
-            </div>
-        </div>
 
-        <section class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 class="text-2xl font-bold mb-8">Shop by Category</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <a href="/madefor/category/products/category/:women" class="group">
-                    <div
-                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
-                        <img src="/images/wc.jpg" class="w-full h-100 object-cover" alt="Women" />
-                        <div class="p-4">
-                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Women</h3>
-                        </div>
+        <section class="relative min-h-screen flex items-center justify-center bg-[#F5F5F5]">
+            <div class="max-w-8xl mx-auto w-full p-6 sm:p-12 relative">
+                <div class="absolute inset-0 bg-black/10 rounded-xl"></div>
+                <div
+                    class="backdrop-blur-3xl relative grid grid-cols-1 md:grid-cols-2 min-h-[60vh] bg-white/10 border border-white/30 shadow-lg rounded-xl overflow-hidden">
+                    <div data-aos="fade-right" data-aos-delay="200" class="flex flex-col justify-center px-4 sm:px-6 lg:px-8 z-10">
+                        <h1 class="text-6xl md:text-7xl font-bold leading-tight tracking-tighter mb-8">
+                            GET<br />YOURSELF<br />INTO THE<br />RIGHT GEAR
+                        </h1>
+                        <a href="#"
+                            class="inline-flex items-center space-x-2 text-lg font-medium hover:text-[#C49F6B] transition-colors duration-200 group w-fit">
+                            <span>VIEW SUMMER COLLECTIONS</span>
+                            <i
+                                class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform duration-200"></i>
+                        </a>
                     </div>
-                </a>
-                <a href="/madefor/category/products/category/:men" class="group">
-                    <div
-                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
-                        <img src="/images/mc.jpg" class="w-full h-100 object-cover" alt="Men" />
-                        <div class="p-4">
-                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Men</h3>
-                        </div>
+                        <img data-aos="fade-left" data-aos-delay="200" src="/images/hero-1.jpg" alt="Fashion Model"
+                            class="w-full h-full object-cover object-top" />
                     </div>
-                </a>
-                <a href="/madefor/category/products/category/this/:unisex" class="group">
-                    <div
-                        class="relative overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
-                        <img src="/images/kc.jpg" class="w-full h-100 object-cover" alt="Kids" />
-                        <div class="p-4">
-                            <h3 class="font-medium text-gray-900 group-hover:text-custom">Kids</h3>
-                        </div>
-                    </div>
-                </a>
+
+                </div>
             </div>
         </section>
 
@@ -214,7 +205,7 @@
                                 onclick="filterCategory('<%= category %>')">
                                 <%= category %>
                             </button>
-                        <% }); %>
+                            <% }); %>
                 </div>
             </div>
 
@@ -241,7 +232,8 @@
                                 </h3>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-custom font-medium">₹ <%= product.price %> /-</span>
-                                    <span class="ml-2 text-sm line-through" style="color: red;" >₹ <%= 2*product.price %></span>
+                                    <span class="ml-2 text-sm line-through" style="color: red;">₹ <%= 2*product.price %>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -261,6 +253,108 @@
 
         </section>
 
+        <section class="max-w-7xl mx-auto py-10 px-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 lg:gap-10 gap-5">
+
+                <a href="/search/products?query=tshirt">
+                    <div data-aos="fade-up" data-aos-delay="200" class="relative group overflow-hidden">
+                        <img src="/images/tshirts.jpg"
+                             alt="T-Shirts" 
+                             class="w-full h-full object-cover transition duration-500 filter blur-md group-hover:blur-none">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white text-3xl font-bold transform rotate-90 group-hover:rotate-0 transition duration-500">T-Shirts</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="/search/products?query=hoodie">
+                    <div data-aos="fade-up" data-aos-delay="300" class="relative group overflow-hidden">
+                        <img src="/images/hoodies.jpg" 
+                             alt="Hoodies" 
+                             class="w-full h-full object-cover transition duration-500 filter blur-md group-hover:blur-none">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white text-3xl font-bold transform rotate-90 group-hover:rotate-0 transition duration-500">Hoodies</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/search/products?query=sweatshirt">
+                    <div data-aos="fade-up" data-aos-delay="400" class="relative group overflow-hidden">
+                        <img src="/images/sweatshirts.jpg"
+                             alt="Sweatshirts" 
+                             class="w-full h-full object-cover transition duration-500 filter blur-md group-hover:blur-none">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white text-3xl font-bold transform rotate-90 group-hover:rotate-0 transition duration-500">Sweatshirts</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/search/products?query=jacket">
+                    <div data-aos="fade-up" data-aos-delay="500" class="relative group overflow-hidden sm:height-[50px]">
+                        <img src="/images/jackets.jpg" 
+                             alt="Jackets" 
+                             class="w-full h-full object-cover transition duration-500 filter blur-md group-hover:blur-none">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white text-3xl font-bold transform rotate-90 group-hover:rotate-0 transition duration-500">Jackets</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/search/products?query=accessory">
+                    <div data-aos="fade-up" data-aos-delay="600" class="relative group overflow-hidden">
+                        <img src="/images/hoodies.jpg"
+                             alt="Other" 
+                             class="w-full h-full object-cover transition duration-500 filter blur-md group-hover:blur-none">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white text-3xl font-bold transform rotate-90 group-hover:rotate-0 transition duration-500">Accessories</span>
+                        </div>
+                    </div>
+                </a>
+    
+            </div>
+        </section>
+
+
+        <!-- Shop by Category Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-16">
+            <h2 class="text-3xl font-bold text-center mb-10 text-gray-900">Shop by Category</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Women Category -->
+                <a href="/madefor/category/products/category/women" class="group block">
+                    <div class="relative overflow-hidden rounded-lg shadow-lg bg-white transition-transform transform hover:scale-105">
+                        <img src="/images/wc.jpg" class="w-full h-64 object-cover" alt="Women" />
+                        <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-semibold text-gray-900 group-hover:text-custom transition-colors">Women</h3>
+                        </div>
+                    </div>
+                </a>
+        
+                <!-- Men Category -->
+                <a href="/madefor/category/products/category/men" class="group block">
+                    <div class="relative overflow-hidden rounded-lg shadow-lg bg-white transition-transform transform hover:scale-105">
+                        <img src="/images/mc.jpg" class="w-full h-64 object-cover" alt="Men" />
+                        <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-semibold text-gray-900 group-hover:text-custom transition-colors">Men</h3>
+                        </div>
+                    </div>
+                </a>
+        
+                <!-- Kids Category -->
+                <a href="/madefor/category/products/category/unisex" class="group block">
+                    <div class="relative overflow-hidden rounded-lg shadow-lg bg-white transition-transform transform hover:scale-105">
+                        <img src="/images/kc.jpg" class="w-full h-64 object-cover" alt="Kids" />
+                        <div class="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-xl font-semibold text-gray-900 group-hover:text-custom transition-colors">Kids</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
         <%- include('components/toast.ejs') %>
 
             <section class="bg-white">
@@ -314,56 +408,109 @@
                     </div>
                 </div>
             </section>
-    </main>
-    <footer class="bg-gray-900 text-white">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">About Us</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Our Story</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Returns &amp; Exchanges</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook-f text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="https://www.instagram.com/keshvibe.in?igsh=MWowcTUxaDVnczRpNg==&utm_source=ig_contact_invite"
-                            class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-pinterest text-xl"></i>
-                        </a>
+
+            <div class="bg-[#111] relative w-full w-full text-center p-12">
+                <h1 class="text-4xl sm:text-5xl leading-tight max-w-2xl mx-auto relative z-10" style="color: white;">
+                    Put your hands first at our <br> premium and limited products
+                </h1>
+
+                <div class="mt-8 relative z-10 w-full max-w-md mx-auto">
+                    <p class="text-gray-400 mb-3">Subscribe to our newsletter.</p>
+                    <div class="flex flex-col space-y-3">
+                       <form action="/user/subscribe/to/newsletter" method="POST">
+                        <input type="email" placeholder="E-mail" class="w-full p-4 bg-gray-900 text-white rounded-md outline-none">
+
+                        <button class="w-full p-4 bg-white text-black font-semibold flex items-center justify-center space-x-2 rounded-md mt-6">
+                            <span>SUBSCRIBE</span>
+                        </button>
+                       </form>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-12 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-400 text-sm">© 2025 keshvibe. All rights reserved.</p>
+
+            <div class="scroll-container w-full py-4 mb-10">
+                <div class="scroll-text flex text-black text-4xl font-semibold">
+                    <span>KESHVIBE</span> <span>⬛</span> 
+                    <span>KESHVIBE</span> <span>⬛</span> 
+                    <span>KESHVIBE</span> <span>⬛</span> 
+                    <span>KESHVIBE</span> <span>⬛</span> 
+                    <span>KESHVIBE</span> <span>⬛</span> 
+                    <span>KESHVIBE</span> <span>⬛</span> 
                 </div>
             </div>
-        </div>
-    </footer>
-    <script src="/js/security.js" ></script>
+
+
+            <footer class="grid grid-cols-1 md:grid-cols-2 h-[500px] bg-[#111] text-white">
+               
+                <div class="relative h-full" data-aos="fade-right" data-aos-delay="100">
+                    <img src="/images/footer.jpg" alt="Clothing Store" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center px-10">
+                        <div class="border border-white w-12 h-12 flex items-center justify-center mb-6">
+                            <span class="text-white text-lg font-semibold">M</span>
+                        </div>
+                        <h2 class="text-3xl font-light mb-4">Find out about the sales at your local shop</h2>
+                    </div>
+                </div>
+        
+               
+                <div class="bg-[#111] flex flex-col justify-center p-10">
+                    <div class="grid grid-cols-3 gap-6">
+                        <!-- Categories -->
+                        <div>
+                            <h3 class="text-white font-semibold mb-4">CATEGORIES</h3>
+                            <ul class="text-gray-400 space-y-2">
+                                <li data-aos="fade-left" data-aos-delay="200" >Hoodies</li>
+                                <li data-aos="fade-left" data-aos-delay="400">Sweatshirts</li>
+                                <li data-aos="fade-left" data-aos-delay="600">Shirts</li>
+                                <li data-aos="fade-left" data-aos-delay="800">T-Shirts</li>
+                                <li data-aos="fade-left" data-aos-delay="1000">Jackets</li>
+                            </ul>
+                        </div>
+                        <!-- Company -->
+                        <div>
+                            <h3 class="text-white font-semibold mb-4">COMPANY</h3>
+                            <ul class="text-gray-400 space-y-2">
+                                <li data-aos="fade-left" data-aos-delay="200">About</li>
+                                <li data-aos="fade-left" data-aos-delay="400">Blog</li>
+                                <li data-aos="fade-left" data-aos-delay="600">Contact</li>
+                                <li data-aos="fade-left" data-aos-delay="800">Guarantee</li>
+                                <li data-aos="fade-left" data-aos-delay="1000">Shipping</li>
+                            </ul>
+                        </div>
+                        <!-- Support -->
+                        <div>
+                            <h3 class="text-white font-semibold mb-4">SUPPORT</h3>
+                            <ul class="text-gray-400 space-y-2">
+                                <li data-aos="fade-left" data-aos-delay="200">Style Guide</li>
+                                <li data-aos="fade-left" data-aos-delay="400">Licensing</li>
+                                <li data-aos="fade-left" data-aos-delay="600">Change log</li>
+                                <li data-aos="fade-left" data-aos-delay="800">Instructions</li>
+                            </ul>
+                            <!-- Social Icons -->
+                            <div class="flex space-x-4 mt-4 text-gray-400 text-xl">
+                                <a data-aos="fade-left" data-aos-delay="200" href="#" class="hover:text-white"><i class="fa-brands fa-facebook"></i></a>
+                                <a data-aos="fade-left" data-aos-delay="400" href="#" class="hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+                                <a data-aos="fade-left" data-aos-delay="600" href="#" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>
+                                <a data-aos="fade-left" data-aos-delay="800" href="https://www.instagram.com/keshvibe.in" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>
+            </footer>
+    </main>
+    
+    <script src="/js/security.js"></script>
     <script src="js/toast.js"></script>
     <script>
+
+
+        AOS.init({
+            duration: 1000, // Animation duration in ms
+            once: false      // Run animation only once
+        });
+
+
         let page = 2; // Start loading from page 2 since page 1 is already loaded
         function filterCategory(category) {
             document.querySelectorAll(".product-card").forEach(card => {
